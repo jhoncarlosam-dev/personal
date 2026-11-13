@@ -36,17 +36,6 @@ QA:
 - Spring Boot no está en habilidades. Hay una calculadora de sueldos muy corta en ese stack; no alcanza para defenderla en una entrevista.
 - No entran certificados de management ni de finanzas de la Universidad de Palermo, ni el curso de IA de BIG school. Si una vacante los pide, se agregan.
 
-## Siguiente proyecto, antes de ampliar la hoja de backend
+## Prueba para practicar
 
-Las pruebas técnicas que llegaron de compañeros son material de práctica, no proyectos para publicar tal cual. Varias son enunciados de ingreso y no deben subirse a un repositorio público.
-
-El hueco concreto para un rol backend en el estilo de esos enunciados es una API en Java y Spring Boot, con PostgreSQL, que se pueda clonar y correr. Cuando exista, la hoja de backend gana una línea en Proyectos. Hasta entonces, esa línea no está.
-
-Un buen primer ejercicio, en privado, es un sistema de parqueaderos o de reservas con este alcance:
-
-- autenticación JWT y dos roles
-- reglas de cupo, horario o cobro, con histórico
-- capas separadas, DTOs y errores consistentes
-- diagrama entidad-relación, colección de Postman, Docker y algunas pruebas
-
-Arrenda ya demuestra que ese tipo de sistema se puede construir en Python. El ejercicio nuevo demuestra el stack que piden las pruebas.
+El enunciado está en [practica/ruta-norte/ENUNCIADO.md](practica/ruta-norte/ENUNCIADO.md). Es una API de clases de conducción con Spring Boot, Spring Security, JWT, PostgreSQL y JUnit. Cubre lo que se repite en las vacantes de Java. La solución no va en este repositorio: el ejercicio es construirla.
