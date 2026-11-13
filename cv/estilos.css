@@ -1,0 +1,189 @@
+@page {
+  size: A4;
+  margin: 8.5mm 12mm 8mm;
+}
+
+:root {
+  --ink: #17211c;
+  --muted: #3d4a44;
+  --line: #d7e0da;
+  --paper: #ffffff;
+  --accent: #1c5c45;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #e7ece8;
+  color: var(--ink);
+  font-family: Inter, "Liberation Sans", sans-serif;
+  font-size: 9.8pt;
+  line-height: 1.28;
+}
+
+body.qa {
+  --accent: #1d3f68;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: var(--paper);
+  padding: 8.5mm 12mm 8mm;
+}
+
+header.top {
+  border-top: 4px solid var(--accent);
+  padding-top: 8px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 18.5pt;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-weight: 650;
+}
+
+.role {
+  margin: 3px 0 0;
+  color: var(--accent);
+  font-size: 11pt;
+  font-weight: 650;
+}
+
+.kicker {
+  margin: 0 0 3px;
+  color: var(--muted);
+  font-size: 8pt;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.contact {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 9pt;
+  line-height: 1.4;
+}
+
+.contact a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h2 {
+  margin: 6px 0 2px;
+  padding-bottom: 1px;
+  border-bottom: 1px solid var(--line);
+  color: var(--accent);
+  font-size: 9pt;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  break-after: avoid;
+}
+
+p {
+  margin: 0;
+}
+
+.skills {
+  margin: 0;
+}
+
+.skills div {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 8px;
+  margin: 0 0 1px;
+}
+
+.skills dt {
+  margin: 0;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.skills dd {
+  margin: 0;
+}
+
+.job,
+.project,
+.school {
+  margin: 0 0 4px;
+  break-inside: avoid;
+}
+
+.school {
+  margin-bottom: 3px;
+}
+
+.job header,
+.project header,
+.school header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+h3 {
+  margin: 0;
+  font-size: 10.4pt;
+  line-height: 1.2;
+  font-weight: 670;
+}
+
+.meta,
+.when {
+  margin: 0;
+  color: var(--muted);
+  font-size: 9pt;
+}
+
+.when {
+  white-space: nowrap;
+}
+
+ul {
+  margin: 1px 0 0;
+  padding-left: 1.05em;
+}
+
+li {
+  margin: 0;
+  padding-left: 1px;
+}
+
+li::marker {
+  color: var(--accent);
+}
+
+a.repo {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@media print {
+  html,
+  body {
+    background: white;
+  }
+
+  .page {
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+  }
+}
