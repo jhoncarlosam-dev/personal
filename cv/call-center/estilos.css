@@ -1,0 +1,286 @@
+@page {
+  size: A4;
+  margin: 11mm 13mm 11mm;
+}
+
+:root {
+  --ink: #1b2421;
+  --muted: #3e4b46;
+  --line: #d5e0db;
+  --paper: #ffffff;
+  --accent: #0f4c5c;
+  --soft: #f3f7f6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #e7ece9;
+  color: var(--ink);
+  font-family: "Liberation Sans", Arial, sans-serif;
+  font-size: 10.4pt;
+  line-height: 1.32;
+}
+
+body.bilingue {
+  --accent: #24315e;
+  --soft: #f4f5f9;
+  --line: #d8dce8;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: var(--paper);
+  padding: 11mm 13mm 11mm;
+}
+
+header.top {
+  border-top: 5px solid var(--accent);
+  padding-top: 8px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 18.5pt;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.role {
+  margin: 3px 0 0;
+  color: var(--accent);
+  font-size: 11.5pt;
+  font-weight: 700;
+}
+
+.kicker {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.contact {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 9.6pt;
+  line-height: 1.4;
+}
+
+.contact a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h2 {
+  margin: 11px 0 4px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--line);
+  color: var(--accent);
+  font-size: 9pt;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  break-after: avoid;
+}
+
+p {
+  margin: 0;
+}
+
+.profile {
+  margin: 0;
+}
+
+.langs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.lang {
+  background: var(--soft);
+  border-left: 3px solid var(--accent);
+  padding: 6px 8px 7px;
+}
+
+.lang strong {
+  display: block;
+  font-size: 10.5pt;
+}
+
+.lang .level {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.lang p {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9.4pt;
+}
+
+.skills {
+  margin: 0;
+}
+
+.skills div {
+  display: grid;
+  grid-template-columns: 6.4rem 1fr;
+  gap: 8px;
+  margin: 0 0 2px;
+}
+
+.skills dt {
+  margin: 0;
+  font-weight: 700;
+}
+
+.skills dd {
+  margin: 0;
+}
+
+.job,
+.school {
+  margin: 0 0 7px;
+  break-inside: avoid;
+}
+
+.school {
+  margin-bottom: 4px;
+}
+
+.job header,
+.school header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+h3 {
+  margin: 0;
+  font-size: 11pt;
+  line-height: 1.2;
+}
+
+.meta,
+.when {
+  margin: 0;
+  color: var(--muted);
+  font-size: 9.5pt;
+}
+
+.when {
+  white-space: nowrap;
+}
+
+ul {
+  margin: 2px 0 0;
+  padding-left: 1.1em;
+}
+
+li {
+  margin: 0 0 1px;
+}
+
+li::marker {
+  color: var(--accent);
+}
+
+a.quiet {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.banner {
+  margin: 0 0 10px;
+  padding: 7px 10px;
+  background: #fff6e5;
+  border: 1px solid #e3c48a;
+  color: #6d4e16;
+  font-weight: 700;
+}
+
+.guide h2 {
+  margin-top: 13px;
+}
+
+.guide h3 {
+  margin: 8px 0 2px;
+  font-size: 11pt;
+}
+
+.guide p + p,
+.guide li + li {
+  margin-top: 3px;
+}
+
+.script {
+  margin: 6px 0;
+  padding: 8px 10px;
+  background: var(--soft);
+  border-left: 3px solid var(--accent);
+  break-inside: avoid;
+}
+
+.script p + p {
+  margin-top: 4px;
+}
+
+.who {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+}
+
+th,
+td {
+  text-align: left;
+  vertical-align: top;
+  padding: 4px 8px 4px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+th {
+  color: var(--accent);
+  font-size: 8.5pt;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media print {
+  html,
+  body {
+    background: white;
+  }
+
+  .page {
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .lang,
+  .script,
+  .banner {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
