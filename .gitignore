@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+.ruff_cache/
+ejemplos/bandeja/
+ejemplos/archivo/
+ejemplos/reporte.md
+ejemplos/reporte.json
