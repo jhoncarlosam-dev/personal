@@ -1,0 +1,32 @@
+FORO 1. Viabilidad en Debate
+Publicar este texto como avance, antes de cerrar el foro (domingo 22 de noviembre de 2026).
+
+Cordial saludo, tutor y compañeros.
+
+Retomo a Nelumbo Consultores, empresa de software a la medida con sede en Cúcuta, y la problemática de la calidad que se coordina tarde entre células que entregan al mismo tiempo. Analizarla con el Modelo de Sistemas Viables permite ver si la organización tiene variedad suficiente para responder a clientes, normas y tecnologías distintas, sin perder la promesa de entregar un producto listo. El modelo no se queda en el área de pruebas: mira el acople entre el entorno, la operación y la gestión (Cabrera-Moya y Prieto-Rodríguez, 2022).
+
+En el entorno están los clientes de seguros, construcción, comercio y salud, los usuarios finales, los contratos y la norma de datos, y el cambio tecnológico. Esa variedad cambia el plazo y el criterio de aceptación. La operación son las células de desarrollo web, móvil, integraciones, diseño, analítica y las pruebas del incremento: allí se puede corregir el defecto mientras todavía cabe en el plazo. La gestión —dirección general, dirección de operaciones, dirección de proyectos y el tablero compartido— reparte personas y sincroniza el trabajo. Cuando la gestión sigue sobre todo la fecha, el entorno devuelve el defecto por boca del cliente.
+
+Quedo atento a la retroalimentación antes de cerrar los cinco sistemas.
+
+---
+
+FORO 2. Arquitectura Viable
+Publicar este texto cuando el tutor haya comentado el avance anterior. Es la explicación de los cinco sistemas, en palabras propias.
+
+Cordial saludo.
+
+El Modelo de Sistemas Viables separa cinco funciones que tienen que conversar, no cinco cargos. El sistema 1 produce lo que la organización es. Cada operación tiene gestión propia y toca su pedazo de entorno; el metasistema no la reemplaza, le presta recursos, normas y cuentas (Cabrera-Moya y Prieto-Rodríguez, 2022). El sistema 2 amortigua los choques entre esas operaciones con un lenguaje común, un estándar y un sistema de información. Sin eso, cada equipo cierra el trabajo a su manera y el conjunto se descoordina.
+
+El sistema 3 mira el adentro y el ahora: reparte recursos y busca que las operaciones rindan juntas. El sistema 3* no se fía solo del informe. Va a la fuente, de vez en cuando, y contrasta. Si ese canal falta, la dirección se entera cuando el problema ya salió. El sistema 4 mira el afuera y el mañana, y por eso Cabrera-Moya y Prieto-Rodríguez (2022) lo tratan como motor de aprendizaje. Si va más rápido que el sistema 3, la empresa promete lo que todavía no puede sostener. El sistema 5 cierra la identidad y equilibra el presente con el futuro (Sánchez Rueda, 1995).
+
+En Nelumbo el sistema 1 son las células que construyen y prueban; el 2, la dirección de proyectos y el tablero; el 3, la dirección de operaciones; el 3*, un muestreo de evidencias que hoy es irregular; el 4, la lectura de mercado y de tecnología; y el 5, la dirección general con la misión de calidad comprobada. El punto frágil es que el cliente está haciendo la auditoría que debería hacer el sistema 3*.
+
+---
+
+CÓMO COMENTAR A DOS COMPAÑEROS
+No dejes un “de acuerdo”. Usa algo de lo que ellos escribieron. Puedes adaptar estas dos ideas:
+
+1. “En tu entorno listas varios actores. El MSV pide, además, decir cuál de ellos le mete más variedad a la operación y si la gestión tiene un canal para enterarse a tiempo. Si ese canal es solo el informe final, el sistema 3* está débil.”
+
+2. “Vi que ubicaste el área de calidad en el sistema 1. Tiene sentido si la prueba hace parte de producir el servicio. Convendría separar eso de una revisión hecha por alguien que no ejecutó la prueba: esa segunda mirada es el sistema 3*, y no compite con la primera.”
