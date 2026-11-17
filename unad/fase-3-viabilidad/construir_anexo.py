@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parent
 TEMPLATE = Path("/tmp/plantilla.pptx")
 PPTX = ROOT / "Figura_MSV_Nelumbo.pptx"
 PNG = ROOT / "figura_msv.png"
+PNG_RED = ROOT / "figura_red.png"
 DOCX = ROOT / "Anexo_Fase_3_Nelumbo.docx"
 PDF = ROOT / "Anexo_Fase_3_Nelumbo.pdf"
 FORO = ROOT / "textos-para-el-foro.txt"
@@ -105,12 +106,12 @@ def fill_slide(src, dest):
         tree = ET.ElementTree(ET.fromstring(zin.read("ppt/slides/slide1.xml")))
     entorno = shape_by_name(tree, "Rectángulo 1")
     env_ps = paragraphs(entorno)
-    set_para_text(env_ps[1], "Clientes de varios sectores", size=1100)
+    set_para_text(env_ps[1], "Clientes empresariales", size=1100)
     cursor = env_ps[1]
     for line in (
-        "Usuarios del software",
-        "Contratos y datos",
-        "Cambio tecnológico",
+        "Mercado de talento",
+        "Proveedores tecnológicos",
+        "Entes reguladores",
     ):
         cursor = insert_after(entorno, cursor, line, 1100)
 
@@ -118,13 +119,13 @@ def fill_slide(src, dest):
     org_ps = paragraphs(org)
     set_para_text(
         org_ps[3],
-        "Nelumbo Consultores S. A. S., Cúcuta. Software a la medida.",
+        "Nelumbo Consultores. Consultoría tecnológica de operación remota.",
         size=1100,
     )
     problem = insert_after(
         org,
         org_ps[-1],
-        "La calidad se acuerda tarde entre células que entregan a la vez. El defecto lo detecta el cliente.",
+        "Al cerrar, el saber técnico no queda documentado. La operación depende de personas.",
         1100,
     )
     problem_pr = problem.find(A + "pPr")
@@ -134,23 +135,23 @@ def fill_slide(src, dest):
     problem_pr.set("algn", "l")
 
     processes = {
-        "Rectángulo 25": "Desarrollo web",
-        "Rectángulo 39": "App móvil",
-        "Rectángulo 43": "Datos",
-        "Rectángulo 45": "Diseño UX",
-        "Rectángulo 41": "Analítica",
-        "Rectángulo 37": "Pruebas",
+        "Rectángulo 25": "Desarrollo",
+        "Rectángulo 39": "QA",
+        "Rectángulo 43": "Soporte",
+        "Rectángulo 45": "Diseño",
+        "Rectángulo 41": "Cierre",
+        "Rectángulo 37": "Lecciones",
     }
     for name, label in processes.items():
         sp = shape_by_name(tree, name)
         set_para_text(paragraphs(sp)[0], label, size=900, bold=True)
 
     systems = {
-        "Rectángulo 47": "Dirección general",
-        "Rectángulo 57": "Mercado y tecnología",
-        "Rectángulo 59": "Dirección de operaciones",
-        "Rectángulo 63": "Proyectos y tablero",
-        "Rectángulo 61": "Muestreo de evidencias",
+        "Rectángulo 47": "Director general",
+        "Rectángulo 57": "Mercado y talento",
+        "Rectángulo 59": "Informes vigentes",
+        "Rectángulo 63": "Líderes de proyecto",
+        "Rectángulo 61": "Verificar el registro",
     }
     for name, label in systems.items():
         sp = shape_by_name(tree, name)
@@ -165,9 +166,9 @@ def fill_slide(src, dest):
     desc_ps = paragraphs(desc)
     set_para_text(
         desc_ps[-1],
-        "El entorno trae clientes, normas y tecnologías distintas. El sistema 1 construye y prueba; "
-        "el 2 fija un mismo criterio de terminado; el 3 reparte personas y plazos; el 3* mira si la prueba quedó hecha; "
-        "el 4 lee el mercado y el 5 cuida la identidad. Si el 3* llega tarde, el defecto lo encuentra el cliente.",
+        "El saber nace en desarrollo, QA, soporte y cierre. El sistema 2 acuerda el formato y la consulta. "
+        "El 3 mide satisfacción, defectos y tiempos, no si el saber circula. El 3* verifica el registro. "
+        "El 4 lee talento y tecnología. El 5 autoriza la base. Esas funciones dependen unas de otras.",
         size=1000,
     )
 
@@ -211,6 +212,107 @@ def render_figure():
     )
 
 
+def render_network():
+    html_path = ROOT / "figura_red.html"
+    html_path.write_text(
+        """<!DOCTYPE html>
+<html lang="es">
+<meta charset="utf-8">
+<title>Red de dependencias</title>
+<style>
+  html, body { margin: 0; background: #fff; }
+  svg { display: block; }
+</style>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="820" viewBox="0 0 1180 820">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#1F4E79"/>
+    </marker>
+    <marker id="arrd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1.2 L 9 5 L 0 8.8 z" fill="#8A5A00"/>
+    </marker>
+  </defs>
+  <rect width="1180" height="820" fill="#ffffff"/>
+  <text x="590" y="28" text-anchor="middle" font-family="Arial" font-size="13" fill="#666">Las flechas continuas son dependencias de la operación. Las punteadas cierran la decisión y la retroalimentación.</text>
+
+  <rect x="460" y="48" width="260" height="62" rx="8" fill="#F8F1E3" stroke="#1F4E79" stroke-width="1.6"/>
+  <text x="590" y="73" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" fill="#1F4E79">Director general</text>
+  <text x="590" y="94" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Autoriza tiempo y continuidad</text>
+
+  <rect x="70" y="168" width="270" height="62" rx="8" fill="#F8F1E3" stroke="#1F4E79" stroke-width="1.6"/>
+  <text x="205" y="193" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" fill="#1F4E79">Líderes de proyecto</text>
+  <text x="205" y="214" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Criterio, formato y consulta</text>
+
+  <rect x="840" y="168" width="270" height="62" rx="8" fill="#F8F1E3" stroke="#1F4E79" stroke-width="1.6"/>
+  <text x="975" y="193" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" fill="#1F4E79">Informes de desempeño</text>
+  <text x="975" y="214" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Satisfacción, defectos, tiempos</text>
+
+  <rect x="70" y="330" width="250" height="70" rx="8" fill="#E7F4EA" stroke="#1F4E79" stroke-width="1.6"/>
+  <text x="195" y="358" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" fill="#1F4E79">Fuentes del saber</text>
+  <text x="195" y="380" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Cierre, QA y soporte</text>
+
+  <rect x="390" y="330" width="220" height="70" rx="8" fill="#E7F4EA" stroke="#1F4E79" stroke-width="1.6"/>
+  <text x="500" y="358" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" fill="#1F4E79">Identificar</text>
+  <text x="500" y="380" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Lecciones y prácticas</text>
+
+  <rect x="680" y="330" width="200" height="70" rx="8" fill="#E7F4EA" stroke="#1F4E79" stroke-width="1.6"/>
+  <text x="780" y="358" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" fill="#1F4E79">Documentar</text>
+  <text x="780" y="380" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Formato común</text>
+
+  <rect x="940" y="330" width="190" height="70" rx="8" fill="#E7F4EA" stroke="#1F4E79" stroke-width="1.6"/>
+  <text x="1035" y="358" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" fill="#1F4E79">Base interna</text>
+  <text x="1035" y="380" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Plataformas ya usadas</text>
+
+  <rect x="940" y="500" width="190" height="70" rx="8" fill="#E7F4EA" stroke="#1F4E79" stroke-width="1.6"/>
+  <text x="1035" y="528" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" fill="#1F4E79">Consultar</text>
+  <text x="1035" y="550" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Requerir y diseñar</text>
+
+  <rect x="500" y="620" width="250" height="70" rx="8" fill="#E8F1F8" stroke="#1F4E79" stroke-width="1.6"/>
+  <text x="625" y="648" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" fill="#1F4E79">Evaluar</text>
+  <text x="625" y="670" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Si se registró y se consultó</text>
+
+  <rect x="70" y="700" width="280" height="58" rx="8" fill="#F4F7FB" stroke="#1F4E79" stroke-width="1.4" stroke-dasharray="6 4"/>
+  <text x="210" y="724" text-anchor="middle" font-family="Arial" font-size="15" font-weight="700" fill="#1F4E79">Mercado de talento</text>
+  <text x="210" y="744" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">La rotación se lleva el saber no escrito</text>
+
+  <line x1="320" y1="365" x2="388" y2="365" stroke="#1F4E79" stroke-width="1.6" marker-end="url(#arr)"/>
+  <line x1="610" y1="365" x2="678" y2="365" stroke="#1F4E79" stroke-width="1.6" marker-end="url(#arr)"/>
+  <line x1="880" y1="365" x2="938" y2="365" stroke="#1F4E79" stroke-width="1.6" marker-end="url(#arr)"/>
+  <line x1="1035" y1="400" x2="1035" y2="498" stroke="#1F4E79" stroke-width="1.6" marker-end="url(#arr)"/>
+  <path d="M860 230 C 800 420, 780 540, 730 618" fill="none" stroke="#1F4E79" stroke-width="1.6" marker-end="url(#arr)"/>
+  <path d="M205 230 C 205 280, 430 280, 470 328" fill="none" stroke="#1F4E79" stroke-width="1.6" marker-end="url(#arr)"/>
+  <path d="M300 190 C 520 190, 700 250, 760 328" fill="none" stroke="#1F4E79" stroke-width="1.6" marker-end="url(#arr)"/>
+  <path d="M500 110 C 380 130, 280 145, 230 166" fill="none" stroke="#8A5A00" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrd)"/>
+  <path d="M940 560 C 820 640, 760 655, 752 655" fill="none" stroke="#1F4E79" stroke-width="1.6" marker-end="url(#arr)"/>
+  <path d="M1035 400 C 1120 470, 1120 680, 752 670" fill="none" stroke="#1F4E79" stroke-width="1.4" marker-end="url(#arr)"/>
+  <path d="M500 655 C 360 655, 300 470, 470 390" fill="none" stroke="#8A5A00" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrd)"/>
+  <path d="M625 620 C 625 520, 620 180, 590 112" fill="none" stroke="#8A5A00" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrd)"/>
+  <path d="M350 730 C 470 760, 520 140, 560 112" fill="none" stroke="#8A5A00" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrd)"/>
+
+  <text x="330" y="338" font-family="Arial" font-size="12" fill="#1F4E79">tres entradas</text>
+  <text x="430" y="250" font-family="Arial" font-size="12" fill="#1F4E79">criterio</text>
+  <text x="520" y="230" font-family="Arial" font-size="12" fill="#1F4E79">formato</text>
+  <text x="760" y="430" font-family="Arial" font-size="12" fill="#1F4E79">informe</text>
+  <text x="360" y="128" font-family="Arial" font-size="12" fill="#8A5A00">autoriza</text>
+  <text x="1088" y="560" font-family="Arial" font-size="12" fill="#1F4E79">evidencia</text>
+  <text x="300" y="600" font-family="Arial" font-size="12" fill="#8A5A00">ajusta cómo se identifica</text>
+  <text x="500" y="500" font-family="Arial" font-size="12" fill="#8A5A00">sostener o detener</text>
+</svg>
+</body>
+</html>
+""",
+        encoding="utf-8",
+    )
+    svg_path = ROOT / "figura_red.svg"
+    html = html_path.read_text(encoding="utf-8")
+    svg_path.write_text(html[html.index("<svg") : html.index("</svg>") + len("</svg>")], encoding="utf-8")
+    subprocess.run(
+        ["rsvg-convert", "-w", "1180", "-h", "820", "-o", str(PNG_RED), str(svg_path)],
+        check=True,
+    )
+
+
 def shade(cell, color):
     tc = cell._tc
     tc_pr = tc.get_or_add_tcPr()
@@ -242,7 +344,7 @@ def add_text(paragraph, text, **kwargs):
     return run
 
 
-def body(document, text, space_after=8, first_line=None):
+def body(document, text, space_after=6, first_line=None):
     paragraph = document.add_paragraph()
     paragraph.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     paragraph.paragraph_format.space_after = Pt(space_after)
@@ -425,17 +527,17 @@ def build_document():
     subtitle = document.add_paragraph()
     subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
     subtitle.paragraph_format.space_after = Pt(12)
-    add_text(subtitle, "Aplicación del Modelo de Sistemas Viables a Nelumbo Consultores", size=12, italic=True, color=NAVY)
+    add_text(subtitle, "Gestión del conocimiento en Nelumbo Consultores", size=12, italic=True, color=NAVY)
 
     for label, value in (
         ("Nombre del estudiante: ", "Jhon Carlos Acevedo Mendoza"),
-        ("Tutor: ", "Víctor Hugo Mercado Ramos"),
+        ("Tutor: ", "Ing. Víctor Hugo Mercado Ramos"),
         ("Universidad: ", "Universidad Nacional Abierta y a Distancia"),
         ("Unidad gestora: ", "Escuela de Ciencias Básicas, Tecnología e Ingeniería"),
         ("Programa: ", "Ingeniería de Sistemas"),
         ("Curso: ", "Teoría de Sistemas en las Organizaciones"),
         ("Código: ", "204016"),
-        ("Lugar y fecha: ", "Cúcuta, 17 de noviembre de 2026"),
+        ("Lugar y fecha: ", "17 de noviembre de 2026"),
     ):
         line = document.add_paragraph()
         line.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -447,43 +549,43 @@ def build_document():
     heading(document, "Introducción")
     body(
         document,
-        "Este documento aplica el Modelo de Sistemas Viables (MSV) a Nelumbo Consultores, empresa de desarrollo de software con sede en Cúcuta, para examinar si puede sostener la calidad cuando varias células entregan producto al mismo tiempo. En este modelo, una organización es viable cuando conserva su identidad y sigue existiendo en un entorno que cambia (Sánchez Rueda, 1995). El escrito presenta la organización, la problemática y el Objetivo de Desarrollo Sostenible 9; describe el entorno, la operación y la gestión; explica los cinco sistemas; muestra la figura del modelo aplicado al caso y cierra con fortalezas y oportunidades de fortalecimiento.",
+        "Este documento aplica el Modelo de Sistemas Viables (MSV) a Nelumbo Consultores, la consultora tecnológica de operación remota analizada en las fases anteriores. La problemática priorizada sigue siendo la ausencia de un sistema formal de gestión del conocimiento: al cerrar un proyecto, el saber técnico del equipo no siempre queda documentado y la operación depende de personas específicas. En este modelo, una organización es viable cuando conserva su identidad y puede seguir existiendo en un entorno que cambia (Sánchez Rueda, 1995). El escrito retoma la organización, el ODS 9 y la definición raíz de la Fase 2; describe el entorno, la operación y la gestión; identifica los cinco sistemas; y muestra que esas actividades forman una red de dependencias, no una secuencia lineal.",
     )
     body(
         document,
-        "El pensamiento sistémico permite leer el defecto de software como una señal de los canales con los que la empresa se regula. Ramírez Sánchez et al. (2009) presentan el MSV como un instrumento de la cibernética organizacional para estudiar, diagnosticar y proponer mecanismos de viabilidad. En esa lectura, la estructura que importa es el conjunto de comunicaciones que atenúan la variedad.",
+        "Ramírez Sánchez et al. (2009) presentan el MSV como un instrumento de la cibernética organizacional para estudiar, diagnosticar y proponer mecanismos de viabilidad. En esa lectura, la estructura que importa es el conjunto de comunicaciones que atenúan la variedad. Osorio Gómez (2007) plantea que los elementos de un sistema se interrelacionan para alcanzar un propósito común. En Nelumbo, ese propósito es que las lecciones aprendidas y las mejores prácticas queden disponibles para los proyectos siguientes.",
     )
 
     heading(document, "Contextualización de la organización")
     body(
         document,
-        "Nelumbo Consultores S. A. S. desarrolla software a la medida desde Cúcuta. En su presentación pública se define por alinear la tecnología con la visión de negocio del cliente. Ofrece diseño de experiencia, arquitectura, desarrollo web y móvil, aseguramiento de calidad, analítica, servicios en la nube y dirección de proyectos. Los sectores que enuncia son, entre otros, aseguradoras, constructoras, comercio, dispositivos médicos y gestión organizacional (Nelumbo Consultores, s. f.-a). La misión publicada es consolidar soluciones tecnológicas alineadas con los clientes actuales y potenciales. La visión es sostenerse como referente nacional e internacional, adaptándose a las condiciones del mercado (Nelumbo Consultores, s. f.-b).",
+        "Nelumbo Consultores es una empresa colombiana de consultoría tecnológica que opera de manera remota. Pertenece al sector de servicios de tecnologías de la información. Desarrolla software, asegura la calidad de las soluciones y acompaña la transformación digital de clientes del sector empresarial. Integra equipos de ingenieros de sistemas, analistas QA y desarrolladores, coordinados por líderes de proyecto y un director general. Sus áreas funcionales son la gestión de proyectos, el desarrollo de software, el QA y el soporte al cliente. Como sistema abierto, intercambia requerimientos, talento humano, herramientas, recursos e información técnica con sus clientes, con proveedores de tecnología, con entes reguladores y con el mercado de talento digital.",
     )
     body(
         document,
-        "La operación se organiza en células que combinan análisis de negocio, diseño, desarrollo, pruebas y despliegue. La dirección general fija la identidad. La dirección de operaciones reparte personas y plazos. La dirección de proyectos sincroniza el día a día. Este análisis se sitúa en el aseguramiento de calidad, porque allí se hace visible si una entrega está realmente lista. Conozco ese punto desde la práctica de pruebas: el defecto que no quedó escrito en el acuerdo de aceptación reaparece cuando el cliente revisa.",
+        "La problemática, retomada de la Fase 1 y precisada en la Fase 2, es la ausencia de un sistema formal de gestión del conocimiento. Cuando un proyecto finaliza, el conocimiento técnico del equipo no siempre queda documentado de manera estructurada. Esa dispersión genera dependencia de personas específicas y dificulta la escalabilidad. La retroalimentación vigente —encuestas de satisfacción, revisiones de sprint, informes de desempeño, tasa de defectos y tiempo de resolución— permite ajustar las entregas, pero no asegura que las lecciones aprendidas y las mejores prácticas queden disponibles para los proyectos siguientes.",
     )
     body(
         document,
-        "La problemática priorizada es la coordinación tardía de la calidad entre células que trabajan en paralelo. Cada cliente llega con su lenguaje, su plazo y su criterio de aceptación. Negocio, desarrollo y pruebas pueden cerrar significados distintos de la palabra terminado. El defecto no se ve primero en el tablero. Se ve en la revisión del cliente o cuando el producto ya está en uso. La causa está en el desajuste de variedad. El entorno —varios clientes, normas sobre datos personales, cambios de alcance y tecnologías nuevas— se mueve con más estados posibles que los canales con los que la empresa se regula. Cabrera-Moya y Prieto-Rodríguez (2022) recogen el criterio de Conant y Ashby: un regulador necesita al menos tanta variedad como el sistema que pretende regular.",
+        "La definición raíz de la Fase 2 describe el cambio esperado: que desarrolladores, analistas QA y líderes de proyecto, bajo la autoridad del director general, transformen ese saber disperso en lecciones y mejores prácticas disponibles en una base interna. El director general puede autorizar o detener la iniciativa. Los líderes deciden, en cada cierre, si el conocimiento queda documentado. La operación remota, la rotación del talento y la necesidad de articular gestión de proyectos, desarrollo, QA y soporte condicionan el sistema.",
     )
     body(
         document,
-        "En la operación se observan tres condiciones que alimentan ese desajuste. El criterio de aceptación queda repartido en comentarios y conversaciones, y no en un acuerdo visible para las tres disciplinas. La prueba entra cuando el desarrollo ya considera cerrado el incremento, de modo que corregir consume el plazo. Y falta una mirada distinta de quien ejecutó la prueba, que muestree evidencias antes del paso a producción. Los actores internos son las células de entrega, los analistas de negocio, los analistas de calidad, la dirección de proyectos y la dirección de operaciones. Afuera están el cliente que contrata y la persona que usa el software. La consecuencia interna es retrabajo y presión sobre la fecha. La consecuencia externa es el desgaste de la promesa pública de entregar un producto listo, con calidad comprobada, en el tiempo acordado.",
+        "El desajuste es de variedad. El entorno —clientes, proveedores de tecnología, reguladores y mercado de talento— cambia más rápido que el canal que conserva lo aprendido. Cabrera-Moya y Prieto-Rodríguez (2022) recogen el criterio de Conant y Ashby: un regulador necesita al menos tanta variedad como el sistema que pretende regular. Si el saber vive en una persona, la salida de esa persona se lleva la capacidad de responder al siguiente proyecto. Los actores internos son el director general, los líderes de proyecto, los desarrolladores, los analistas QA y el soporte. Afuera están los clientes empresariales y el mercado de talento digital.",
     )
     body(
         document,
-        "El Objetivo de Desarrollo Sostenible con el que se relaciona el caso es el 9: construir infraestructuras resilientes, promover la industrialización sostenible y fomentar la innovación (Naciones Unidas, s. f.). La meta 9.5 pide mejorar la capacidad tecnológica de los sectores productivos, y la meta 9.b pide apoyar el desarrollo tecnológico en los países en desarrollo. Nelumbo construye, desde una ciudad fronteriza, piezas de esa infraestructura para salud, seguros, obra y comercio. Si el software sale inestable, el aporte al objetivo se queda en el anuncio de la innovación.",
+        "El Objetivo de Desarrollo Sostenible con el que se relaciona el caso es el 9: construir infraestructuras resilientes, promover la industrialización inclusiva y sostenible y fomentar la innovación (Naciones Unidas, s. f.). Una consultora que no retiene su conocimiento debilita la base con la que diseña soluciones y responde al mercado tecnológico. Conservar las lecciones y las mejores prácticas sostiene la capacidad de la firma para entregar y adaptarse, que es el aporte de Nelumbo a ese objetivo.",
     )
     body(
         document,
-        "El MSV es pertinente porque muestra el acople entre entorno, operación y gestión. El procedimiento de pruebas queda dentro de ese acople (Cabrera-Moya y Prieto-Rodríguez, 2022). Sánchez Rueda (1995) lo propone como lectura de la estabilidad y de la adaptabilidad, que son las dos condiciones de una organización efectiva. Desde Ingeniería de Sistemas, la misma problemática se puede tratar como diseño de canales de información: qué se atenúa, qué se amplifica y en qué momento la retroalimentación alcanza para corregir. Ramírez Sánchez et al. (2009), en la Universidad Libre, muestran que ese diseño se hace con las personas que viven la operación.",
+        "El MSV es pertinente porque muestra si el entorno, la operación y la gestión tienen canales para que el conocimiento circule (Cabrera-Moya y Prieto-Rodríguez, 2022). Sánchez Rueda (1995) lo propone como lectura de la estabilidad y de la adaptabilidad. Desde Ingeniería de Sistemas, la base interna es un canal de información: qué se atenúa al cierre, qué se amplifica al iniciar requerimientos y en qué momento la evaluación vuelve para corregir. Ramírez Sánchez et al. (2009) muestran, en la Universidad Libre, que ese diseño se hace con las personas que viven la operación. La observación recibida sobre el modelo conceptual de la Fase 2 pide, además, que los nodos queden interconectados en una red y no solo en una fila. Esa red se desarrolla después de identificar los cinco sistemas.",
     )
 
     heading(document, "Análisis de las tres entidades básicas del Modelo de Sistemas Viables")
     body(
         document,
-        "Cabrera-Moya y Prieto-Rodríguez (2022) resumen el sistema viable en tres elementos: la operación, que produce el servicio; el metasistema de gestión, que presta recursos, normas y control; y el entorno, del que la organización depende y sobre el que también actúa. La Tabla 1 ubica esas tres entidades en Nelumbo y las relaciona con la problemática de la calidad tardía.",
+        "Cabrera-Moya y Prieto-Rodríguez (2022) resumen el sistema viable en tres elementos: la operación, que produce el servicio; el metasistema de gestión, que presta recursos, normas y control; y el entorno, del que la organización depende y sobre el que también actúa. La Tabla 1 ubica esas tres entidades en Nelumbo y las relaciona con la gestión del conocimiento.",
         space_after=4,
     )
     caption(document, "Tabla 1", "Análisis de las tres entidades básicas del Modelo de Sistemas Viables en Nelumbo Consultores")
@@ -493,18 +595,18 @@ def build_document():
         [
             [
                 "Entorno",
-                "Clientes de seguros, construcción, comercio, salud y gestión organizacional; usuarios finales del software; contratos y normas sobre datos personales; competidores y tecnologías emergentes, entre ellas la nube, la analítica y los agentes de inteligencia artificial (Nelumbo Consultores, s. f.-a).",
-                "Esos actores cambian el alcance, el plazo y el criterio de aceptación. Si la empresa los lee tarde, la calidad se negocia cuando el producto ya está construido.",
+                "Clientes empresariales, proveedores de tecnología, entes reguladores y mercado de talento digital. Con ellos la empresa intercambia requerimientos, herramientas, normas e información técnica.",
+                "Esos actores definen qué debe aprenderse y quién permanece en el equipo. Si una persona rota y el saber no está documentado, la capacidad de responder al siguiente cliente sale con ella.",
             ],
             [
                 "Operación",
-                "Células que desarrollan software web, aplicaciones móviles, datos e integraciones, diseño de experiencia y analítica, junto con las pruebas del incremento. Cada célula tiene una gestión local de proyecto.",
-                "Son quienes construyen el software y quienes pueden ver el defecto mientras corregirlo todavía cabe en el plazo. Si la prueba entra después del cierre, la operación entrega un terminado que el cliente no reconoce.",
+                "Desarrollo de software, aseguramiento de calidad y soporte al cliente, con el levantamiento de requerimientos, el diseño, las pruebas, la gestión de incidencias y la entrega. Cada proyecto es una unidad que produce el servicio y, al mismo tiempo, el conocimiento.",
+                "Son quienes pueden identificar, registrar y consultar las lecciones durante el trabajo. Si el cierre solo entrega documentación técnica al cliente, la operación termina y el aprendizaje se queda en las personas.",
             ],
             [
                 "Gestión",
-                "Dirección general, dirección de operaciones, dirección de proyectos y el tablero de seguimiento compartido por negocio, desarrollo y pruebas.",
-                "Reparte personas y plazos, sincroniza células y sostiene la promesa de calidad. Cuando pesa más la fecha que la evidencia de prueba, la gestión conoce el problema por el reclamo del cliente.",
+                "Director general y líderes de proyecto. El director habilita las condiciones y puede sostener o detener la iniciativa. Los líderes coordinan el sprint, el cierre y la decisión de documentar.",
+                "Hoy la gestión observa satisfacción, defectos y tiempos de resolución. Esos datos ajustan la entrega y no dicen si las lecciones circularon hacia el proyecto siguiente.",
             ],
         ],
         [2.6, 6.7, 6.7],
@@ -512,13 +614,13 @@ def build_document():
     note(document, "Elaboración propia con base en la operación de Nelumbo Consultores y en Cabrera-Moya y Prieto-Rodríguez (2022).")
     body(
         document,
-        "Las tres entidades se regulan entre sí. El entorno le mete variedad a la operación: cada cliente trae reglas y urgencias propias. La operación absorbe esa variedad cuando negocio, desarrollo y pruebas comparten el criterio de aceptación antes de construir. La gestión amplifica ese acuerdo, lo hace visible en el tablero, y atenúa el ruido de plazos que compiten entre células. Si la gestión se queda en el reporte de la fecha, el entorno devuelve el defecto por la vía del cliente. Mirar las tres piezas juntas ubica la problemática en el acople, que es el punto de partida para leer después los cinco sistemas.",
+        "Las tres entidades se regulan entre sí. El entorno pide adaptación y, a la vez, mueve el talento. La operación genera el saber en el desarrollo, el QA y el soporte, y lo necesita otra vez al iniciar requerimientos y diseño. La gestión puede amplificar ese saber con un criterio de cierre y una base compartida, o atenuarlo si el informe solo mira la entrega. Cuando la gestión se queda en la satisfacción, los defectos y los tiempos, el entorno devuelve el costo en forma de dependencia de personas. Mirar las tres piezas juntas ubica la problemática en el acople, que es el punto de partida para leer los cinco sistemas.",
     )
 
     heading(document, "Representación gráfica del Modelo de Sistemas Viables")
     body(
         document,
-        "La Figura 1 conserva la estructura de la plantilla de la guía: entorno, organización, procesos del sistema 1 y gestión con los sistemas 2, 3, 3*, 4 y 5. Los textos corresponden al caso de Nelumbo y a la problemática de la calidad tardía. La página está en horizontal para que los recuadros de la plantilla se puedan leer.",
+        "La Figura 1 conserva la estructura de la plantilla de la guía: entorno, organización, procesos del sistema 1 y gestión con los sistemas 2, 3, 3*, 4 y 5. Los textos corresponden a Nelumbo y a la gestión del conocimiento. La página está en horizontal para que los recuadros de la plantilla se puedan leer.",
         space_after=2,
     )
 
@@ -532,7 +634,7 @@ def build_document():
     picture = run.add_picture(str(PNG), width=Inches(9.6))
     set_alt(
         picture,
-        "Diagrama del Modelo de Sistemas Viables de Nelumbo Consultores: entorno con clientes, contratos y tecnología; seis procesos del sistema 1; y gestión con política, inteligencia, cohesión, coordinación y auditoría.",
+        "Diagrama del Modelo de Sistemas Viables de Nelumbo Consultores: entorno con clientes, talento, proveedores y reguladores; procesos de desarrollo, QA, soporte, requerimientos, cierre y lecciones; y gestión con director general, mercado, informes, líderes de proyecto y verificación del registro.",
     )
     note(
         document,
@@ -545,11 +647,11 @@ def build_document():
     heading(document, "Los cinco sistemas del Modelo de Sistemas Viables")
     body(
         document,
-        "El MSV separa la organización en cinco funciones que tienen que conversar. El sistema 1 es la operación que produce aquello que la empresa es. En una empresa de software son las células que diseñan, construyen y prueban el producto del cliente. Cada una tiene gestión propia y, cuando está bien armada, decide lo cotidiano sin pedir permiso para cada caso. Cabrera-Moya y Prieto-Rodríguez (2022) las describen como nodos con autonomía responsable: el metasistema no las sustituye; les presta recursos, normas y rendición de cuentas. Cada sistema 1 está en contacto directo con su nicho, y por eso es el lugar donde la variedad del entorno se siente primero.",
+        "El MSV separa la organización en cinco funciones que tienen que conversar. El sistema 1 es la operación que produce aquello que la empresa es. En una empresa de software son los equipos que diseñan, construyen y prueban el producto del cliente. Cada una tiene gestión propia y, cuando está bien armada, decide lo cotidiano sin pedir permiso para cada caso. Cabrera-Moya y Prieto-Rodríguez (2022) las describen como nodos con autonomía responsable: el metasistema no las sustituye; les presta recursos, normas y rendición de cuentas. Cada sistema 1 está en contacto directo con su nicho, y por eso es el lugar donde la variedad del entorno se siente primero.",
     )
     body(
         document,
-        "El sistema 2 evita que esas operaciones se estorben. En la lectura de Cabrera-Moya y Prieto-Rodríguez (2022), amortigua oscilaciones mediante lenguajes compartidos, estándares, programas de trabajo y sistemas de información. Sin ese acuerdo, una célula cierra un incremento mientras otra todavía no tiene criterio de aceptación. El conjunto se descoordina aunque cada equipo esté ocupado. El sistema 3 mira el adentro y el ahora. Reparte recursos, pide cuentas y busca que las operaciones, juntas, rindan más que la suma de lo que harían aisladas. Junto a él trabaja el sistema 3*, que no se conforma con el informe del responsable de la operación: va a la fuente, de manera esporádica, y recoge la información que el canal formal filtra. Si ese canal no existe, la dirección conoce el problema cuando el problema ya salió al entorno.",
+        "El sistema 2 evita que esas operaciones se estorben. En la lectura de Cabrera-Moya y Prieto-Rodríguez (2022), amortigua oscilaciones mediante lenguajes compartidos, estándares, programas de trabajo y sistemas de información. Sin ese acuerdo, un equipo cierra un incremento mientras otro todavía no tiene criterio de aceptación. El conjunto se descoordina aunque cada equipo esté ocupado. El sistema 3 mira el adentro y el ahora. Reparte recursos, pide cuentas y busca que las operaciones, juntas, rindan más que la suma de lo que harían aisladas. Junto a él trabaja el sistema 3*, que no se conforma con el informe del responsable de la operación: va a la fuente, de manera esporádica, y recoge la información que el canal formal filtra. Si ese canal no existe, la dirección conoce el problema cuando el problema ya salió al entorno.",
     )
     body(
         document,
@@ -557,7 +659,7 @@ def build_document():
     )
     body(
         document,
-        "Los cinco sistemas se regulan por bucles. El entorno informa al sistema 1 y al sistema 4. El sistema 2 sincroniza al 1. El sistema 3 negocia recursos con el 1. El sistema 3* contrasta el informe. El sistema 5 mantiene el balance entre cohesión y adaptación. Una organización es viable cuando esos bucles alcanzan para la variedad que el entorno le presenta, y cuando puede cambiar la forma de operar sin dejar de ser ella misma (Sánchez Rueda, 1995). En la Universidad Libre, el mismo modelo sirvió para revisar autonomía, canales de información y mecanismos de adaptación, con la participación de quienes hacían el trabajo (Ramírez Sánchez et al., 2009). Esa lógica se traslada a Nelumbo en la Tabla 2: la función se asigna por lo que cada instancia hace, no por el nombre del cargo.",
+        "Los cinco sistemas se regulan por bucles, no por una fila del 1 al 5. El entorno informa al sistema 1 y al sistema 4. El sistema 2 sincroniza al 1. El sistema 3 negocia recursos con el 1. El sistema 3* contrasta el informe. El sistema 5 mantiene el balance entre cohesión y adaptación. Una organización es viable cuando esos bucles alcanzan para la variedad del entorno y puede cambiar la forma de operar sin dejar de ser ella misma (Sánchez Rueda, 1995). En la Universidad Libre, el mismo modelo sirvió para revisar autonomía, canales de información y mecanismos de adaptación con quienes hacían el trabajo (Ramírez Sánchez et al., 2009). Esa lógica se traslada a Nelumbo en la Tabla 2: la función se asigna por lo que cada instancia hace.",
     )
 
     heading(document, "Identificación y justificación de los cinco sistemas")
@@ -568,38 +670,66 @@ def build_document():
         [
             [
                 "Sistema 1 – Procesos",
-                "Células de desarrollo web, aplicaciones móviles, datos e integraciones, diseño de experiencia y analítica, con las pruebas del incremento dentro de la entrega.",
-                "Producen el servicio que la misión enuncia: software alineado con el negocio del cliente. La prueba hace parte de esa producción. Sin ella, el sistema 1 entrega actividad y no el producto prometido.",
+                "Desarrollo de software, QA y soporte al cliente, junto con el levantamiento de requerimientos, el diseño, las pruebas, las incidencias y la entrega.",
+                "Producen el servicio de la consultora y, en ese mismo trabajo, el conocimiento técnico. Sin el registro de lo aprendido, el sistema 1 entrega el proyecto y deja el saber en las personas.",
             ],
             [
                 "Sistema 2 – Coordinación",
-                "Dirección de proyectos, seguimiento del trabajo y tablero compartido, con una definición de terminado común a negocio, desarrollo y pruebas.",
-                "Sincroniza células que avanzan en paralelo y reduce el choque por personas, ambientes y criterios distintos. Es el mecanismo que amortigua la oscilación entre equipos.",
+                "Líderes de proyecto, revisiones de sprint y plataformas de gestión que los equipos ya utilizan.",
+                "Sincronizan desarrollo, QA y soporte. En el cierre pueden acordar qué lecciones se conservan y, al iniciar un proyecto, incluir la consulta de la base. Ese lenguaje común amortigua que cada equipo cierre a su manera.",
             ],
             [
                 "Sistema 3 – Cohesión",
-                "Dirección de operaciones.",
-                "Asigna personas, cuida la carga y pide cuentas del plazo y del alcance sobre el conjunto de células. Mira el adentro y el ahora, que es la función de cohesión.",
+                "Director general, mediante los informes de desempeño por proyecto.",
+                "Habilita personas y condiciones, y pide cuentas del conjunto. Hoy esas cuentas cubren satisfacción, tasa de defectos y tiempo de resolución. Miran el adentro y el ahora de la entrega, no la circulación del conocimiento.",
             ],
             [
                 "Sistema 3* – Auditoría",
-                "Muestreo de evidencias de prueba, hecho por alguien que no ejecutó el caso, antes del paso a producción. Hoy ese muestreo es irregular.",
-                "No reemplaza la prueba del sistema 1. Contrasta en la fuente si lo que el informe llama terminado tiene evidencia. Cuando no ocurre, el cliente queda haciendo de auditor.",
+                "Verificación del registro en la base, hecha por alguien distinto de quien declara el cierre. Hoy esa verificación no está separada de la revisión de sprint.",
+                "El sistema 3* contrasta en la fuente si la lección que el informe da por registrada existe y puede consultarse. La revisión de sprint, hecha por el mismo equipo, pertenece al sistema 2.",
             ],
             [
                 "Sistema 4 – Inteligencia",
-                "Lectura comercial y técnica del mercado: los sectores que la empresa ya atiende y las capacidades que ya ofrece, como nube, analítica y agentes de inteligencia artificial.",
-                "Traduce cambios del entorno en opciones de adaptación. Si esa lectura no se contrasta con la capacidad del sistema 3, la oferta crece más rápido que la calidad.",
+                "Lectura del mercado de talento digital, de los proveedores de tecnología y de las demandas de transformación digital de los clientes. La ejercen el director general y los líderes cuando deciden herramientas y contratación.",
+                "Traduce el entorno en opciones de adaptación. Esa lectura depende de que el saber de los proyectos esté en la organización. Si permanece en las personas, la rotación debilita la inteligencia.",
             ],
             [
                 "Sistema 5 – Política",
-                "Dirección general, a partir de la misión, la visión y la promesa pública de cumplir lo acordado con calidad comprobada (Nelumbo Consultores, s. f.-b).",
-                "Fija qué se conserva cuando hay que elegir entre un plazo, una tecnología nueva y la calidad. Es el cierre de identidad del sistema.",
+                "Director general, con la autoridad para autorizar o detener la base de conocimiento y con la visión de que el saber generado en los proyectos es un recurso de la organización.",
+                "Cierra la identidad: la firma se sostiene si puede entregar y adaptarse. Esa política equilibra la entrega de hoy con la disponibilidad del saber para los proyectos futuros.",
             ],
         ],
         [3.2, 6.4, 6.4],
     )
-    note(document, "Elaboración propia. La asignación sigue la función de cada sistema descrita por Cabrera-Moya y Prieto-Rodríguez (2022), aplicada a la operación de Nelumbo Consultores.")
+    note(document, "Elaboración propia. La asignación sigue la función de cada sistema descrita por Cabrera-Moya y Prieto-Rodríguez (2022), aplicada a los actores descritos en la Fase 2.")
+
+    heading(document, "Red de dependencias entre las actividades del conocimiento")
+    body(
+        document,
+        "En la Fase 2 el modelo conceptual ordenó las actividades en una secuencia: identificar las lecciones al cierre, documentarlas, organizarlas en la base, consultarlas al iniciar requerimientos y diseño, y evaluar si se registran y se consultan, con una flecha de retroalimentación al final. La observación del tutor pide interconectar esos nodos en una red dinámica, con varias dependencias. El MSV sirve para ese paso porque sus sistemas no se recorren en fila: cada uno depende de los demás y del entorno (Cabrera-Moya y Prieto-Rodríguez, 2022). Osorio Gómez (2007) recuerda que los elementos se relacionan para un propósito común. En Nelumbo, el propósito es que el conocimiento del proyecto quede disponible para el siguiente.",
+    )
+    body(
+        document,
+        "La Figura 2 dibuja esas dependencias. Identificar lecciones no depende solo del cierre. También entra lo que el QA ve en los defectos y lo que el soporte atiende en las incidencias. Documentar depende de esa identificación, del formato que acuerdan los líderes en la revisión de sprint y del tiempo que habilita el director general. La base depende de lo documentado y de las plataformas que los equipos ya usan. Consultar depende de que la base exista y de que los líderes la incluyan al iniciar requerimientos y diseño. Evaluar depende de los informes de desempeño y de la evidencia que haya en la base. Su resultado vuelve a la identificación, a los líderes y a la decisión del director de sostener o detener la iniciativa.",
+    )
+    caption(document, "Figura 2", "Red de dependencias de la gestión del conocimiento en Nelumbo Consultores")
+    red = document.add_paragraph()
+    red.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    red.paragraph_format.space_after = Pt(2)
+    red_run = red.add_run()
+    red_picture = red_run.add_picture(str(PNG_RED), width=Cm(15.4))
+    set_alt(
+        red_picture,
+        "Red de dependencias: cierre, QA y soporte alimentan la identificación de lecciones; los líderes aportan criterio y formato; el director autoriza; la base se consulta al diseñar; los informes y la base alimentan la evaluación, que ajusta la identificación y la decisión de continuar.",
+    )
+    note(
+        document,
+        "Las flechas continuas unen actividades de la operación. Las punteadas cierran la autorización del director, la retroalimentación de la evaluación y el efecto del mercado de talento. Elaboración propia a partir de la Fase 2 y de la observación del tutor sobre el modelo conceptual.",
+    )
+    body(
+        document,
+        "Esa red cambia la lectura de la viabilidad. Un formato de cierre, por sí solo, no conserva el conocimiento. Hace falta que QA, soporte, líderes, informes y dirección queden en el mismo circuito. El sistema 3* entra en ese cruce: alguien distinto de quien declara el cierre contrasta si el registro existe en la base y puede consultarse. Sin ese contraste, los indicadores actuales siguen mirando la entrega. El mercado de talento cierra el circuito por fuera: si la persona rota, el saber que no quedó escrito deja de estar disponible para adaptarse.",
+    )
 
     heading(document, "Evaluación de la viabilidad organizacional")
     sub = document.add_paragraph()
@@ -609,7 +739,7 @@ def build_document():
     add_text(sub, "Fortalezas y oportunidades de mejora en la interacción de los cinco sistemas", size=12, bold=True, color=NAVY)
     body(
         document,
-        "En Nelumbo las cinco funciones ya se distinguen, aunque nadie las llame así. Hay células que entregan, jefes de proyecto con un tablero común, una dirección de operaciones que reparte gente y plazos, una oferta que ya incluye nube, analítica y agentes de inteligencia artificial, y una dirección general que sostiene una misión pública: tecnología alineada con el negocio del cliente y entrega con calidad comprobada (Nelumbo Consultores, s. f.-b). La fortaleza está en que la identidad, la operación y la lectura del mercado existen. La oportunidad está en el cruce. El sistema 2 todavía permite que terminado signifique cosas distintas para negocio, desarrollo y pruebas. El sistema 3 controla sobre todo el plazo y conoce la calidad por el reporte de la misma célula. El sistema 3* queda corto, porque falta un muestreo de evidencias hecho por alguien que no ejecutó la prueba. El sistema 4 puede abrir una línea tecnológica más rápido de lo que el sistema 3 consigue personas y capacidad de prueba. El bucle de retroalimentación llega tarde, y el cliente ocupa el lugar del auditor.",
+        "Nelumbo ya distingue las funciones del modelo, con los nombres de su operación. El sistema 1 está en desarrollo, QA y soporte. El sistema 2 está en los líderes de proyecto, las revisiones de sprint y las plataformas de gestión. El sistema 3 está en el director general y en los informes de satisfacción, defectos y tiempos. El sistema 4 aparece cuando la dirección y los líderes leen el mercado de talento, los proveedores de tecnología y las demandas de los clientes. El sistema 5 es la autoridad del director para sostener la identidad de una firma que entrega y se adapta. La fortaleza es que los roles y los procesos ya existen: cierre, sprint, requerimientos e informes. La oportunidad está en las dependencias que hoy no se cruzan. El sistema 2 coordina la entrega y no obliga a que el cierre, el QA y el soporte alimenten una misma base. El sistema 3 mide la entrega y no la consulta de lo aprendido. El sistema 3* no está separado de la revisión que hace el mismo equipo. El sistema 4 queda expuesto a la rotación, porque la inteligencia práctica vive en las personas. El bucle se corta al final del proyecto.",
     )
     sub = document.add_paragraph()
     sub.paragraph_format.space_before = Pt(4)
@@ -618,21 +748,21 @@ def build_document():
     add_text(sub, "Fortalecimiento de los sistemas, la problemática y el ODS 9", size=12, bold=True, color=NAVY)
     body(
         document,
-        "Fortalecer esos canales cambia la respuesta al problema y el aporte al ODS 9. Un criterio de terminado visible, acordado antes de construir, aumenta la variedad del sistema 2 y la acerca a la variedad del cliente, en la línea del principio de variedad que recogen Cabrera-Moya y Prieto-Rodríguez (2022). Incluir la prueba dentro del incremento devuelve la corrección al sistema 1, donde todavía cabe en el plazo. Un muestreo de evidencias sobre los flujos críticos le da al sistema 3* información de primera mano. Una regla del sistema 5 equilibra el presente y el mañana: la tecnología nueva se ofrece al cliente cuando el sistema 3 confirma personas y capacidad de prueba. El ODS 9 pide capacidad tecnológica que quede realmente instalada (Naciones Unidas, s. f.). Nelumbo construye software para salud, seguros, obra y comercio. Si ese software sale con la calidad que la misión promete, la innovación se vuelve infraestructura que otros sectores pueden usar. Desde Ingeniería de Sistemas, el fortalecimiento es un diseño de información: qué dato se atenúa, cuál se amplifica y en qué momento vuelve para corregir.",
+        "Fortalecer la red mejora la respuesta al problema y el aporte al ODS 9. El criterio mínimo de cierre, acordado por los líderes, sube la variedad del sistema 2: QA, soporte y desarrollo dejan lección en el mismo formato. Incluir la consulta al iniciar requerimientos y diseño devuelve ese saber al sistema 1 antes de repetir el trabajo. Sumar a los informes el dato de si la lección se registró y se consultó le da al sistema 3 una cuenta distinta de la tasa de defectos. Una verificación breve, hecha por alguien que no declaró el cierre, abre el canal del sistema 3*. La decisión del director de sostener la base equilibra el sistema 5: la entrega de hoy y la capacidad de los proyectos futuros. Cabrera-Moya y Prieto-Rodríguez (2022) recuerdan que el regulador necesita tanta variedad como aquello que regula. El ODS 9 pide capacidad tecnológica que quede instalada (Naciones Unidas, s. f.). En Nelumbo esa capacidad es el conocimiento con el que diseña soluciones. Si las lecciones circulan entre desarrollo, QA y soporte, la innovación de la firma no depende de que una persona siga en el equipo. Desde Ingeniería de Sistemas, el fortalecimiento es el diseño de ese canal: qué se registra al cierre, qué se consulta al empezar y qué informe devuelve la señal para corregir.",
     )
 
     heading(document, "Conclusiones")
     body(
         document,
-        "El Modelo de Sistemas Viables permite leer Nelumbo como una organización que ya cuenta con operación, coordinación, cohesión, inteligencia y política. La falla de calidad aparece como un bucle de información tardío. El cliente detecta el defecto porque el sistema 3* y el acuerdo de terminado del sistema 2 no alcanzan la variedad del entorno.",
+        "El Modelo de Sistemas Viables permite leer la situación de Nelumbo como un corte en los canales de regulación. La firma ya entrega, mide defectos y revisa el sprint. El conocimiento del proyecto no entra en ese circuito, y por eso la operación sigue dependiendo de personas específicas.",
     )
     body(
         document,
-        "La viabilidad de la empresa se juega en conservar la identidad mientras se adapta. La misión publicada pide tecnología alineada con el negocio y calidad comprobada. Esa identidad se sostiene si la dirección equilibra la oferta nueva del sistema 4 con la capacidad real de las células, y si la prueba hace parte de la entrega y no de la disculpa posterior.",
+        "La observación sobre el modelo conceptual de la Fase 2 queda recogida en la red de la Figura 2. Identificar, documentar, consultar y evaluar no avanzan en una sola fila. Cada actividad depende del cierre, del QA, del soporte, de los líderes, de los informes y de la decisión del director. Esa red es la condición de viabilidad: la organización puede adaptarse si el saber permanece cuando las personas cambian.",
     )
     body(
         document,
-        "Ajustar el criterio de terminado, muestrear evidencias antes de producción y atar cada tecnología nueva a la capacidad de prueba son oportunidades de fortalecimiento concretas. Desde la Ingeniería de Sistemas, esas decisiones diseñan los canales de regulación. Desde el ODS 9, convierten la innovación de una empresa de Cúcuta en infraestructura digital que otros sectores pueden usar con confianza.",
+        "Los cambios ya planteados en la Fase 2 —formato de lecciones, base interna, consulta al diseñar e indicador en los informes— se sostienen si el sistema 5 los autoriza, el sistema 2 los sincroniza y el sistema 3* verifica el registro. Desde la Ingeniería de Sistemas, eso diseña el canal de información. Desde el ODS 9, conserva la capacidad tecnológica con la que Nelumbo responde a sus clientes.",
     )
 
     heading(document, "Referencias")
@@ -655,17 +785,9 @@ def build_document():
     reference(
         document,
         [
-            ("Nelumbo Consultores. (s. f.-a). ", False),
-            ("Nelumbo Consultores", True),
-            (". https://www.nelumboconsultores.com/", False),
-        ],
-    )
-    reference(
-        document,
-        [
-            ("Nelumbo Consultores. (s. f.-b). ", False),
-            ("Sobre nosotros", True),
-            (". https://www.nelumboconsultores.com/index.php/sobre-nosotros/", False),
+            ("Osorio Gómez, J. C. (2007). ", False),
+            ("Introducción al pensamiento sistémico", True),
+            (". Programa Editorial Universidad del Valle. https://elibro-net.bibliotecavirtual.unad.edu.co/es/ereader/unad/129056?page=10", False),
         ],
     )
     reference(
@@ -688,37 +810,35 @@ def build_document():
 
 
 FORO_TEXT = """FORO 1. Viabilidad en Debate
-Publicar este texto como avance, antes de cerrar el foro (domingo 22 de noviembre de 2026).
+Publicar este texto como avance. El foro cierra el domingo 22 de noviembre de 2026.
 
 Cordial saludo, tutor y compañeros.
 
-Retomo a Nelumbo Consultores, empresa de software a la medida con sede en Cúcuta, y la problemática de la calidad que se coordina tarde entre células que entregan al mismo tiempo. Analizarla con el Modelo de Sistemas Viables permite ver si la organización tiene variedad suficiente para responder a clientes, normas y tecnologías distintas, sin perder la promesa de entregar un producto listo. El modelo no se queda en el área de pruebas: mira el acople entre el entorno, la operación y la gestión (Cabrera-Moya y Prieto-Rodríguez, 2022).
+Retomo a Nelumbo Consultores, consultora tecnológica de operación remota, y la problemática de la Fase 2: al cerrar un proyecto, el conocimiento técnico no siempre queda documentado y la operación depende de personas específicas. El Modelo de Sistemas Viables permite ver si el entorno, la operación y la gestión tienen canales para que ese saber circule (Cabrera-Moya y Prieto-Rodríguez, 2022).
 
-En el entorno están los clientes de seguros, construcción, comercio y salud, los usuarios finales, los contratos y la norma de datos, y el cambio tecnológico. Esa variedad cambia el plazo y el criterio de aceptación. La operación son las células de desarrollo web, móvil, integraciones, diseño, analítica y las pruebas del incremento: allí se puede corregir el defecto mientras todavía cabe en el plazo. La gestión —dirección general, dirección de operaciones, dirección de proyectos y el tablero compartido— reparte personas y sincroniza el trabajo. Cuando la gestión sigue sobre todo la fecha, el entorno devuelve el defecto por boca del cliente.
+En el entorno están los clientes empresariales, los proveedores de tecnología, los entes reguladores y el mercado de talento. Si una persona rota, el saber no escrito se va con ella. La operación la hacen desarrollo, QA y soporte: ahí se produce el conocimiento, en requerimientos, pruebas, incidencias y entrega. La gestión la hacen el director general y los líderes de proyecto. Hoy los informes miran satisfacción, defectos y tiempos de resolución, y no dicen si las lecciones quedaron disponibles para el proyecto siguiente.
 
-Quedo atento a la retroalimentación antes de cerrar los cinco sistemas.
+También recojo la observación sobre el modelo conceptual. Las actividades de identificar, documentar, consultar y evaluar no pueden quedar en una sola fila: el cierre, el QA y el soporte alimentan la identificación; los líderes aportan el formato; y la evaluación tiene que volver al inicio y a la decisión del director.
+
+Quedo atento a la retroalimentación.
 
 ---
 
 FORO 2. Arquitectura Viable
-Publicar este texto cuando el tutor haya comentado el avance anterior. Es la explicación de los cinco sistemas, en palabras propias.
 
 Cordial saludo.
 
-El Modelo de Sistemas Viables separa cinco funciones que tienen que conversar, no cinco cargos. El sistema 1 produce lo que la organización es. Cada operación tiene gestión propia y toca su pedazo de entorno; el metasistema no la reemplaza, le presta recursos, normas y cuentas (Cabrera-Moya y Prieto-Rodríguez, 2022). El sistema 2 amortigua los choques entre esas operaciones con un lenguaje común, un estándar y un sistema de información. Sin eso, cada equipo cierra el trabajo a su manera y el conjunto se descoordina.
+El Modelo de Sistemas Viables separa cinco funciones que dependen unas de otras. El sistema 1 produce lo que la organización es y toca su entorno; el metasistema no lo reemplaza, le presta recursos, normas y cuentas (Cabrera-Moya y Prieto-Rodríguez, 2022). El sistema 2 amortigua los choques entre operaciones con un lenguaje común y un sistema de información. El sistema 3 mira el adentro y el ahora. El sistema 3* no se queda con el informe: contrasta en la fuente. El sistema 4 mira el afuera y el mañana. El sistema 5 cierra la identidad y equilibra el presente con el futuro (Sánchez Rueda, 1995).
 
-El sistema 3 mira el adentro y el ahora: reparte recursos y busca que las operaciones rindan juntas. El sistema 3* no se fía solo del informe. Va a la fuente, de vez en cuando, y contrasta. Si ese canal falta, la dirección se entera cuando el problema ya salió. El sistema 4 mira el afuera y el mañana, y por eso Cabrera-Moya y Prieto-Rodríguez (2022) lo tratan como motor de aprendizaje. Si va más rápido que el sistema 3, la empresa promete lo que todavía no puede sostener. El sistema 5 cierra la identidad y equilibra el presente con el futuro (Sánchez Rueda, 1995).
-
-En Nelumbo el sistema 1 son las células que construyen y prueban; el 2, la dirección de proyectos y el tablero; el 3, la dirección de operaciones; el 3*, un muestreo de evidencias que hoy es irregular; el 4, la lectura de mercado y de tecnología; y el 5, la dirección general con la misión de calidad comprobada. El punto frágil es que el cliente está haciendo la auditoría que debería hacer el sistema 3*.
+En Nelumbo el sistema 1 es desarrollo, QA y soporte. El 2 son los líderes de proyecto y la revisión de sprint. El 3 es el director con los informes de satisfacción, defectos y tiempos. El 3*, que hoy no está separado, sería verificar si la lección quedó registrada. El 4 es la lectura del mercado de talento y de la tecnología. El 5 es la autoridad del director para sostener la base de conocimiento. El punto frágil es que el saber se corta al cierre del proyecto y no vuelve, por varias vías, al proyecto siguiente.
 
 ---
 
 CÓMO COMENTAR A DOS COMPAÑEROS
-No dejes un “de acuerdo”. Usa algo de lo que ellos escribieron. Puedes adaptar estas dos ideas:
 
-1. “En tu entorno listas varios actores. El MSV pide, además, decir cuál de ellos le mete más variedad a la operación y si la gestión tiene un canal para enterarse a tiempo. Si ese canal es solo el informe final, el sistema 3* está débil.”
+1. “En tu entorno listas varios actores. Conviene decir cuál de ellos le mete más variedad a la operación y si la gestión tiene un canal para enterarse a tiempo. Si el canal es solo el informe final, el sistema 3* queda corto.”
 
-2. “Vi que ubicaste el área de calidad en el sistema 1. Tiene sentido si la prueba hace parte de producir el servicio. Convendría separar eso de una revisión hecha por alguien que no ejecutó la prueba: esa segunda mirada es el sistema 3*, y no compite con la primera.”
+2. “Vi una secuencia de actividades. El MSV pide también las dependencias cruzadas: qué otra área alimenta esa actividad y a quién vuelve el resultado. Una sola flecha de retroalimentación al final deja el modelo en fila.”
 """
 
 
@@ -727,6 +847,7 @@ def main():
     if not TEMPLATE.exists():
         raise SystemExit("No está la plantilla en /tmp/plantilla.pptx")
     render_figure()
+    render_network()
     build_document()
     FORO.write_text(FORO_TEXT, encoding="utf-8")
     subprocess.run(
