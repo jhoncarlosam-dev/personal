@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%238c2f24'/%3E%3C/svg%3E">
+  <title>Laboratorio — Centro de conocimiento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/centro.css">
+</head>
+<body>
+  <a class="skip" href="#contenido">Saltar al contenido</a>
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="index.html">Centro <span>01</span></a>
+      <nav aria-label="Capítulos">
+        <a href="index.html">Inicio</a>
+        <a href="trato.html">El trato</a>
+        <a href="meta.html">Meta</a>
+        <a href="x.html">X</a>
+        <a href="usar.html">Usarlo</a>
+        <a href="laboratorio.html" aria-current="page">Laboratorio</a>
+        <a href="fuentes.html">Fuentes</a>
+      </nav>
+    </div>
+  </header>
+  <main id="contenido" class="wrap">
+    <p class="kicker">Capítulo 05</p>
+    <h1>Un anuncio es un recibo.</h1>
+    <p class="lede">El feed que ya tienes es el material. Eliges dónde lo viste, qué te pedía y qué hiciste. El recibo dice quién pagó, qué señal entregaste y qué harías si estuvieras del lado que cobra.</p>
+
+    <div class="layout">
+      <div>
+        <h2>Ejemplo, para ver el método</h2>
+        <p>Un anuncio de Instagram, de una tienda de tu ciudad. Foto de tenis. Texto: “Llegan mañana. Escríbenos”. Botón a WhatsApp. Tú lo miras y escribes “¿tienen talla 40?”.</p>
+        <div class="receipt" id="ejemplo">
+          <h3>Recibo de ejemplo</h3>
+          <p><strong>Quién pagó.</strong> La tienda le paga a Meta. Tú le escribes a la tienda. Meta cobra por haber producido ese mensaje, o por la probabilidad de producirlo, según cómo armaron la campaña.</p>
+          <p><strong>Por qué pudiste verlo.</strong> Te incluyeron: ciudad, edad, o gente parecida a quienes ya escribieron, o una audiencia ancha y un modelo que te eligió. La puja de la tienda, multiplicada por la probabilidad de que escribieras, más la calidad del anuncio, le ganó a otros anuncios en ese hueco.</p>
+          <p><strong>Qué entregaste al escribir.</strong> Un contacto y una intención de compra. Meta recibe la señal de que el anuncio funcionó. El siguiente anuncio parecido llega con mejor probabilidad.</p>
+          <p><strong>Si la tienda fueras tú.</strong> Haría falta el precio del tenis, un solo pedido (“escribe talla”) y un conteo de conversaciones que terminan en venta. Sin ese conteo, el anuncio es una clase cara.</p>
+        </div>
+
+        <h2>El tuyo</h2>
+        <noscript>
+          <p>Sin JavaScript se queda el ejemplo de arriba. El formulario necesita JavaScript y no envía nada a un servidor.</p>
+        </noscript>
+        <form id="recibo-form">
+          <fieldset>
+            <legend>Dónde lo viste</legend>
+            <div class="choices">
+              <label><input type="radio" name="plataforma" value="facebook" required> Facebook</label>
+              <label><input type="radio" name="plataforma" value="instagram"> Instagram</label>
+              <label><input type="radio" name="plataforma" value="x"> X</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Qué te pedía</legend>
+            <div class="choices">
+              <label><input type="radio" name="accion" value="comprar" required> Comprar</label>
+              <label><input type="radio" name="accion" value="mensaje"> Escribir o dejar un dato</label>
+              <label><input type="radio" name="accion" value="instalar"> Instalar una app</label>
+              <label><input type="radio" name="accion" value="seguir"> Seguir o dar me gusta</label>
+              <label><input type="radio" name="accion" value="mirar"> Mirar o ver un video</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Qué hiciste</legend>
+            <div class="choices">
+              <label><input type="radio" name="hice" value="nada" required> Lo vi y seguí</label>
+              <label><input type="radio" name="hice" value="mire"> Me detuve a mirarlo</label>
+              <label><input type="radio" name="hice" value="clic"> Hice clic</label>
+              <label><input type="radio" name="hice" value="converti"> Escribí, compré o instalé</label>
+            </div>
+          </fieldset>
+          <button type="submit">Armar el recibo</button>
+        </form>
+        <div class="receipt" id="recibo" hidden>
+          <h3>Recibo</h3>
+          <div id="recibo-cuerpo"></div>
+        </div>
+
+        <h2>Glosario</h2>
+        <p>Las palabras del negocio, en el inglés que vas a encontrar. Filtra por cualquiera de los dos idiomas.</p>
+        <form id="filtro" role="search">
+          <label>Buscar en el glosario
+            <input id="glosario-q" type="search" autocomplete="off" placeholder="bid, puja, feed">
+          </label>
+        </form>
+        <dl class="gloss" id="glosario">
+          <div><dt>advertiser</dt><dd>Anunciante. Quien paga el anuncio. En el feed gratis, es el cliente.</dd></div>
+          <div><dt>ad</dt><dd>Anuncio. El mensaje pagado dentro de la app.</dd></div>
+          <div><dt>impression</dt><dd>Impresión. Una vez que el anuncio se muestra.</dd></div>
+          <div><dt>reach</dt><dd>Alcance. Cuántas personas distintas lo vieron.</dd></div>
+          <div><dt>engagement</dt><dd>Interacción. Clic, me gusta, comentario, respuesta, reproducción.</dd></div>
+          <div><dt>click</dt><dd>Clic. Tocaste el anuncio.</dd></div>
+          <div><dt>conversion</dt><dd>Conversión. Ocurrió el resultado que el anunciante eligió.</dd></div>
+          <div><dt>bid</dt><dd>Puja. Lo que ofrece pagar por ese resultado.</dd></div>
+          <div><dt>auction</dt><dd>Subasta. El concurso entre anuncios por un hueco.</dd></div>
+          <div><dt>feed</dt><dd>Feed. La lista de publicaciones del inicio.</dd></div>
+          <div><dt>follower</dt><dd>Seguidor. Una persona suscrita a una cuenta. Es inventario, no ingreso.</dd></div>
+          <div><dt>targeting</dt><dd>Segmentación. Elegir quién entra a la audiencia.</dd></div>
+          <div><dt>pixel</dt><dd>Pixel. Un rastreador en la página del anunciante que le avisa a la plataforma si hubo conversión.</dd></div>
+          <div><dt>estimated action rate</dt><dd>Probabilidad estimada de la acción. Lo que el modelo cree que harás.</dd></div>
+          <div><dt>ad quality</dt><dd>Calidad del anuncio. Si la gente lo tolera, lo oculta o se siente engañada.</dd></div>
+        </dl>
+        <p class="fine" id="glosario-vacio" hidden>Ninguna entrada coincide con esa búsqueda.</p>
+      </div>
+      <aside class="side">
+        <h3>Cómo usarlo cada semana</h3>
+        <ol>
+          <li>Abre la app con el oficio que escribiste en la ficha.</li>
+          <li>Para en el primer anuncio.</li>
+          <li>Llena el formulario antes de opinar del producto.</li>
+          <li>Si hiciste clic, anota en una libreta qué dato entregaste.</li>
+        </ol>
+        <p>El formulario no guarda el anuncio ni lo envía. Arma el texto y se queda en la página.</p>
+        <p><a href="fuentes.html">Ver las fuentes de las cifras</a></p>
+      </aside>
+    </div>
+  </main>
+  <footer>
+    <p>El recibo aplica la lógica publicada por Meta y por el S-1 de SpaceX. No conoce la campaña real ni el precio que pagaron por ti.</p>
+  </footer>
+  <script src="js/laboratorio.js"></script>
+</body>
+</html>
