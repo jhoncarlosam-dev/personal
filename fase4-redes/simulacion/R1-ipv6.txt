@@ -1,0 +1,48 @@
+enable
+configure terminal
+hostname R1-IPv6
+no ip domain-lookup
+ipv6 unicast-routing
+banner motd # Red IPv6 UNAD - prefijo de documentacion 2001:DB8:134::/48 #
+enable secret unad2026
+service password-encryption
+!
+ipv6 dhcp pool POOL-V6
+ address prefix 2001:DB8:134:3::/64
+ dns-server 2001:DB8:134:1::10
+ domain-name unad.edu.co
+!
+ip dhcp pool POOL-V4-IOT
+ network 10.20.30.0 255.255.255.0
+ default-router 10.20.30.1
+ dns-server 10.20.10.10
+!
+interface GigabitEthernet0/0
+ description Troncal hacia SW-IPv6
+ no shutdown
+!
+interface GigabitEthernet0/0.10
+ description Servidores 2001:DB8:134:1::/64 y 10.20.10.0/24
+ encapsulation dot1Q 10
+ ip address 10.20.10.1 255.255.255.0
+ ipv6 address 2001:DB8:134:1::1/64
+ no shutdown
+!
+interface GigabitEthernet0/0.20
+ description Inalambrica 2001:DB8:134:2::/64 y 10.20.20.0/24
+ encapsulation dot1Q 20
+ ip address 10.20.20.1 255.255.255.0
+ ipv6 address 2001:DB8:134:2::1/64
+ no shutdown
+!
+interface GigabitEthernet0/0.30
+ description DHCP del router 2001:DB8:134:3::/64 y 10.20.30.0/24
+ encapsulation dot1Q 30
+ ip address 10.20.30.1 255.255.255.0
+ ipv6 address 2001:DB8:134:3::1/64
+ ipv6 nd managed-config-flag
+ ipv6 dhcp server POOL-V6
+ no shutdown
+!
+end
+write
