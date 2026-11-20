@@ -1,0 +1,55 @@
+enable
+configure terminal
+hostname R1-Nucleo
+no ip domain-lookup
+banner motd # Red IPv4 UNAD - practica academica. Uso autorizado del grupo. #
+enable secret unad2026
+service password-encryption
+!
+interface GigabitEthernet0/0
+ description Troncal hacia SW-Acceso (VLAN 10, 30 y 40)
+ no shutdown
+!
+interface GigabitEthernet0/0.10
+ description Subred servidores 192.168.134.0/26
+ encapsulation dot1Q 10
+ ip address 192.168.134.1 255.255.255.192
+ no shutdown
+!
+interface GigabitEthernet0/0.30
+ description Subred inalambrica 192.168.134.128/26
+ encapsulation dot1Q 30
+ ip address 192.168.134.129 255.255.255.192
+ no shutdown
+!
+interface GigabitEthernet0/0.40
+ description Subred DHCP IoT y TV 192.168.134.192/26
+ encapsulation dot1Q 40
+ ip address 192.168.134.193 255.255.255.192
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description Enlace /30 hacia el firewall FW-UNAD
+ ip address 172.16.1.1 255.255.255.252
+ no shutdown
+!
+interface GigabitEthernet0/2
+ description Enlace /30 hacia R2-Borde
+ ip address 172.16.1.5 255.255.255.252
+ no shutdown
+!
+ip route 192.168.134.64 255.255.255.192 172.16.1.2
+!
+router ospf 1
+ router-id 1.1.1.1
+ passive-interface GigabitEthernet0/0.10
+ passive-interface GigabitEthernet0/0.30
+ passive-interface GigabitEthernet0/0.40
+ network 192.168.134.0 0.0.0.63 area 0
+ network 192.168.134.128 0.0.0.63 area 0
+ network 192.168.134.192 0.0.0.63 area 0
+ network 172.16.1.4 0.0.0.3 area 0
+ redistribute static subnets
+!
+end
+write

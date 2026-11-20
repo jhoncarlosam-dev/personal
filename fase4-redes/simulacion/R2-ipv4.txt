@@ -1,0 +1,24 @@
+enable
+configure terminal
+hostname R2-Borde
+no ip domain-lookup
+banner motd # Borde del sitio. Aqui viviria la ruta por defecto hacia el ISP. #
+enable secret unad2026
+service password-encryption
+!
+interface GigabitEthernet0/0
+ description Enlace /30 hacia R1-Nucleo
+ ip address 172.16.1.6 255.255.255.252
+ no shutdown
+!
+interface Loopback0
+ description Prefijo de prueba del borde
+ ip address 10.255.255.2 255.255.255.255
+!
+router ospf 1
+ router-id 2.2.2.2
+ network 172.16.1.4 0.0.0.3 area 0
+ network 10.255.255.2 0.0.0.0 area 0
+!
+end
+write

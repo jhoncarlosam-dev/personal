@@ -1,0 +1,56 @@
+enable
+configure terminal
+hostname SW-IPv6
+no ip domain-lookup
+!
+vlan 10
+ name SERVIDORES
+vlan 20
+ name INALAMBRICA
+vlan 30
+ name DHCP-ROUTER
+!
+interface FastEthernet0/1
+ description Troncal a R1-IPv6 GigabitEthernet0/0
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30
+ no shutdown
+!
+interface FastEthernet0/2
+ description SRV-WEB
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+!
+interface FastEthernet0/3
+ description SRV-CORREO
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+!
+interface FastEthernet0/4
+ description PC-Admin
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+!
+interface FastEthernet0/10
+ description AP-UNAD
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+!
+interface FastEthernet0/20
+ description PC que recibe DHCPv6 del router
+ switchport mode access
+ switchport access vlan 30
+ no shutdown
+!
+interface FastEthernet0/21
+ description Servidor o gateway IoT
+ switchport mode access
+ switchport access vlan 30
+ no shutdown
+!
+end
+write
