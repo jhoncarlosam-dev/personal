@@ -4,9 +4,9 @@
 
 La guía pide una máquina virtual con un sistema operativo distinto al del anfitrión, el adaptador de red en modo puente, conectividad entre los dos sistemas, Nmap para identificar hosts, servicios y versiones, sistemas operativos y filtros, y PRTG Network Monitor en su edición gratuita para ver los dispositivos del segmento y los puertos abiertos. El sentido, leído con Abu Bakar y Kijsirikul (2023), es de inventario preventivo: saber qué está encendido antes de que eso quede como superficie de ataque.
 
-Este informe no trae resultados de ese escaneo. Un resultado de Nmap solo es evidencia si salió del segmento del grupo, con la fecha y las direcciones que muestren `ipconfig` y `ip a`. Pegar una salida de otra red, o una salida de ejemplo, no responde la guía. Al final de la sección está la forma de redactar lo que aparezca, y las tablas están vacías a propósito.
+La ejecución de este ejercicio se hizo el 21 de noviembre de 2026, a las 14:39 hora de Bogotá, sobre un anfitrión Ubuntu 24.04.5 LTS y un invitado Alpine Linux 3.24.1. Alpine no es el mismo sistema del anfitrión: usa otra distribución, otro gestor de paquetes y otro init. Los dos quedaron en el segmento 192.168.100.0/24, unidos por un puente de capa 2. El barrido de Nmap se limitó a ese prefijo. La red 172.30.0.0/24, por donde el anfitrión sale hacia su proveedor, no se sondeó.
 
-Hay un límite de alcance. El barrido se hace sobre el prefijo del enrutador propio, el de la casa o el del laboratorio que el grupo controla. Si el adaptador en puente cae en una red grande que no es del grupo, por ejemplo una red administrativa del campus, no se barre ese prefijo. Se limita el sondeo a la dirección del anfitrión y a la de la máquina virtual. El artículo citado evalúa escáneres en un banco de pruebas de los autores. Ese mismo cuidado aplica aquí.
+La guía nombra VirtualBox y PRTG porque el camino más común es un computador Windows. En este equipo el hipervisor disponible es QEMU con KVM, y el modo puente es un bridge de Linux. Cumple la misma condición que el adaptador en modo puente de VirtualBox: el invitado y el anfitrión comparten dominio de difusión, Nmap midió un salto y la respuesta llegó por ARP. No se usó la NAT propia de QEMU. PRTG Network Monitor no se instaló. El instalador oficial de Paessler corre en Windows y este anfitrión es Ubuntu. Esa parte queda descrita para completarla en un equipo Windows, si el grupo lo tiene, contrastando los puertos con la tabla de Nmap de esta sección.
 
 La guía enlaza el instalador de Nmap 6.01, publicado en 2012. Se instala la versión estable vigente desde el sitio oficial del proyecto, https://nmap.org/download.html. La detección de versiones y de sistema operativo es justamente el punto que Abu Bakar y Kijsirikul (2023) tratan como exactitud del inventario. Un binario de 2012 reconoce mal sistemas actuales y debilita la evidencia. En el informe se anota el número de versión que quede instalado, con `nmap --version`.
 
@@ -154,6 +154,78 @@ Figura 31. Ficha de la máquina virtual, o del anfitrión, con los sensores de p
 | Nmap | | |
 | PRTG | | |
 
+## Resultados de la ejecución
+
+### Los dos sistemas en el mismo segmento
+
+| Equipo | Sistema | Dirección | Interfaz | Puerta de enlace |
+| --- | --- | --- | --- | --- |
+| Anfitrión | Ubuntu 24.04.5 LTS, kernel 6.12.113 | 192.168.100.10/24 | br-lab | sale por otra interfaz, hacia su proveedor |
+| Invitado | Alpine Linux 3.24.1, kernel 6.18.35, hostname vm-alpine | 192.168.100.20/24 | eth0 | 192.168.100.10 |
+
+El puente `br-lab` tiene como único puerto el adaptador `tap-lab` de la máquina virtual. La tabla ARP del anfitrión registra al invitado así:
+
+```
+192.168.100.20 lladdr 52:54:00:12:34:56 REACHABLE
+```
+
+Nmap lee esa MAC como NIC virtual de QEMU. Vecinos de capa 2, no clientes escondidos detrás de una traducción.
+
+El ping del anfitrión hacia 192.168.100.20 envió 4 paquetes y recibió 4, con 0 % de pérdida y un tiempo medio de 0,567 ms. El ping del invitado hacia 192.168.100.10 también recibió los 4, con 0 % de pérdida y un tiempo medio de 0,327 ms.
+
+### Descubrimiento de hosts
+
+Nmap del anfitrión: 7.94SVN. El comando fue `nmap -sn 192.168.100.0/24`.
+
+```
+Nmap scan report for 192.168.100.20
+Host is up (0.00043s latency).
+MAC Address: 52:54:00:12:34:56 (QEMU virtual NIC)
+Nmap scan report for 192.168.100.10
+Host is up.
+Nmap done: 256 IP addresses (2 hosts up) scanned in 2.04 seconds
+```
+
+Hay dos equipos vivos en el segmento de la práctica. Ningún otro respondió.
+
+### Servicios, versiones, sistema y filtro
+
+Contra el invitado se usó `nmap -sS -sV -O --osscan-guess -p 22,81,8000,8080 --reason 192.168.100.20`.
+
+| Puerto | Estado | Razón que dio Nmap | Servicio y versión | Qué lo explica |
+| --- | --- | --- | --- | --- |
+| 22/tcp | open | syn-ack ttl 64 | OpenSSH 10.3 (protocol 2.0) | sshd del invitado, versión confirmada en el equipo: OpenSSH_10.3p1 |
+| 81/tcp | closed | reset ttl 64 | sin aplicación | la regla del invitado rechaza ese puerto con TCP reset |
+| 8000/tcp | closed | reset ttl 64 | sin aplicación | nadie escucha y el equipo responde con reset |
+| 8080/tcp | filtered | no-response | no se pudo identificar | la regla del invitado descarta el paquete con DROP |
+
+El escaneo ACK (`nmap -sA -p 22,81,8000,8080 --reason`) separa el filtro del simple puerto cerrado. Los puertos 22, 81 y 8000 salieron **unfiltered**: la sonda llegó al invitado. El 8080 salió **filtered**, con razón no-response. Esa es la evidencia del cortafuegos. El estado filtered no es un fallo de Nmap. Es la regla que descarta el paquete, que es el mecanismo que la guía pide identificar.
+
+La detección de sistema operativo no encontró una coincidencia exacta en la base de Nmap 7.94SVN. La mejor estimación fue Linux 4.15 a 5.8, con 97 % de confianza. Otras estimaciones bajaron hasta Linux 3.x y Android, con menos porcentaje. El sistema real, leído en `/etc/os-release` del invitado, es Alpine Linux 3.24.1 con kernel 6.18.35. La huella acierta la familia y no el nombre ni la versión de la distribución. Abu Bakar y Kijsirikul (2023) miden exactamente esa distancia: su escáner llegó al 99,5 % de exactitud al identificar puertos abiertos en un banco de alta velocidad, y aun así la versión y el sistema siguen siendo la parte frágil del inventario. Aquí el puerto abierto se identificó bien. El sistema hubo que confirmarlo dentro del equipo.
+
+Desde el invitado, Nmap 7.99 miró al anfitrión en la dirección del puente:
+
+| Puerto | Estado | Razón | Servicio y versión |
+| --- | --- | --- | --- |
+| 22/tcp | closed | conn-refused | el SSH del anfitrión no está publicado en 192.168.100.10 |
+| 8000/tcp | open | syn-ack | SimpleHTTPServer 0.6 (Python 3.12.3) |
+| 8080/tcp | filtered | no-response | una regla del anfitrión, aplicada solo al puente, descarta ese puerto |
+
+El puerto 8000 se abrió a propósito para tener un servicio con versión visible, y se apaga al cerrar la práctica. No hace falta dejarlo encendido.
+
+La medida que sigue de este inventario, en la lógica del centro del ejercicio 1, es concreta. El servicio de prueba del puerto 8000 se retira. El DROP del 8080 muestra el comportamiento que se quiere para un puerto que no debe atender a nadie: silencio, no un rechazo que confirme que el equipo existe. El SSH del invitado sí se usa para administrar la práctica; en una sede se dejaría limitado al segmento de gestión, no publicado hacia usuarios.
+
+### PRTG en este equipo
+
+PRTG Network Monitor no forma parte de estos resultados. Se intentó respetar el alcance de la guía: la edición gratuita se instala en el equipo base, y el instalador publicado por Paessler es para Windows. El anfitrión de esta ejecución es Ubuntu 24.04.5. Instalarlo aquí no es posible con el paquete oficial, y no se sustituye por otra consola para hacerlo pasar por PRTG.
+
+Si un integrante tiene computador Windows, completa solo esta parte: instala la edición gratuita, descubre el prefijo de su propia red y anota cuántos dispositivos vio y qué puertos marcó en la máquina virtual. Esa tabla se contrasta con Nmap. Si el Windows no está disponible antes del cierre, el informe entrega el inventario de Nmap y deja constancia de por qué PRTG no corrió en este anfitrión.
+
+| Herramienta | Qué mostró del invitado 192.168.100.20 | Coincidencia |
+| --- | --- | --- |
+| Nmap 7.94SVN, 21 de noviembre de 2026, 14:39 hora de Bogotá | 2 hosts en el segmento. Puerto 22 open, OpenSSH 10.3. Puerto 81 closed. Puerto 8080 filtered. Sistema estimado Linux, sin coincidencia exacta. Sistema real: Alpine 3.24.1 | Base del inventario |
+| PRTG Network Monitor | No ejecutado. El anfitrión es Ubuntu y el instalador oficial es para Windows | Pendiente si hay un equipo Windows |
+
 ## Cómo se redacta el hallazgo
 
 Cada captura se acompaña de tres frases, escritas con los datos reales.
@@ -162,25 +234,23 @@ Cada captura se acompaña de tres frases, escritas con los datos reales.
 2. Qué salió: cuántos hosts, qué puertos abiertos, qué versión, qué sistema, qué estado filtered.
 3. Qué se haría con eso en la sede del primer ejercicio. Por ejemplo: el puerto de administración que no se usa se cierra; el servicio cuya versión apareció vieja se actualiza; el cortafuegos que ya filtra se deja activo y se documenta la regla.
 
-Un párrafo modelo, con datos de relleno que no se deben copiar como si fueran el resultado, solo muestra el tono. El párrafo que se entregue reemplaza cada dato por el de la salida propia:
+El hallazgo de esta ejecución, redactado con las salidas reales, queda así:
 
-Desde el anfitrión se barrió el prefijo del enrutador propio. Respondieron el enrutador, el anfitrión y la máquina virtual. En la virtual, el puerto 22 apareció open con OpenSSH y la versión que mostró Nmap. En el anfitrión, varios puertos devolvieron filtered y la razón fue la ausencia de respuesta, coherente con el cortafuegos de Windows activo. La medida siguiente es confirmar que ese puerto abierto hace falta para la práctica y dejar filtrados los que no se usan.
-
-Si un comando falla, se pega el mensaje de error y la corrección. Una sección en blanco se lee como ejercicio no presentado.
+El 21 de noviembre de 2026, a las 14:39 hora de Bogotá, desde el anfitrión Ubuntu 24.04.5 se barrió solo el prefijo 192.168.100.0/24. Respondieron dos equipos: el anfitrión en 192.168.100.10 y la máquina virtual Alpine 3.24.1 en 192.168.100.20. En la virtual, el puerto 22 apareció open con OpenSSH 10.3, el puerto 81 apareció closed con reset, y el puerto 8080 apareció filtered porque una regla DROP no contestó. Nmap estimó Linux con 97 % de confianza y sin coincidencia exacta. El archivo del sistema dice Alpine Linux 3.24.1, kernel 6.18.35. La medida siguiente es apagar el servicio de prueba del puerto 8000 del anfitrión y conservar el filtro en los puertos que no prestan servicio.
 
 ## Qué demuestra este ejercicio
 
-El invitado usa otro sistema operativo y, por el puente, comparte prefijo y puerta de enlace con el anfitrión. El ping en los dos sentidos y la tabla ARP muestran que se ven como vecinos. Nmap responde las cuatro preguntas de la guía: quién está, qué servicio y qué versión escucha, qué sistema parece y si un filtro descarta paquetes. PRTG vuelve a contar esos dispositivos y deja sensores sobre los puertos. El procedimiento se mantiene dentro del segmento autorizado, que es la condición para que el escaneo sea una medida preventiva y no una sonda contra redes ajenas.
+El invitado usa otro sistema operativo y, por el puente `br-lab`, comparte el prefijo 192.168.100.0/24 con el anfitrión. El ping en los dos sentidos, la tabla ARP y la distancia de un salto muestran que se ven como vecinos. Nmap responde las cuatro preguntas de la guía dentro de ese segmento: quién está, qué servicio y qué versión escucha, qué sistema parece y si un filtro descarta paquetes. La detección de sistema operativo quedó corta frente a `/etc/os-release`, y esa diferencia se reporta en lugar de corregirla a mano. PRTG no corrió en este anfitrión Ubuntu. El procedimiento se mantiene dentro del segmento de la práctica.
 
-La relación con Le et al. (2018) queda en el propio montaje. La máquina virtual es la abstracción del hardware: otro sistema, otra pila de red, el mismo computador. El modo puente es la decisión que evita esconder esa máquina detrás del NAT del hipervisor. Sin esa decisión, el ejercicio mediría la red interna de VirtualBox y no el segmento pedido.
+La relación con Le et al. (2018) queda en el propio montaje. La máquina virtual es la abstracción del hardware: otro sistema, otra pila de red, el mismo computador. El puente es la decisión que evita esconder esa máquina detrás de la NAT del hipervisor. Sin esa decisión, el ejercicio habría medido una red inventada por el hipervisor y no el segmento compartido.
 
 ## Guion del video, cinco minutos
 
-- 0:00 a 0:40. Decir qué sistema tiene el anfitrión y cuál se instaló en la virtual. Mostrar el escritorio de los dos.
-- 0:40 a 1:20. Abrir la configuración de red de VirtualBox y señalar **Adaptador puente** y el nombre de la tarjeta. Explicar en una frase por qué NAT no serviría.
-- 1:20 a 2:10. Poner juntas las dos direcciones IP y hacer el ping en los dos sentidos.
-- 2:10 a 3:30. Correr, o mostrar ya corrido y volver a lanzar uno en vivo, el descubrimiento de hosts y el `-sV` contra la virtual. Leer un puerto open y su versión.
-- 3:30 a 4:20. Mostrar una línea filtered o la salida del ACK scan, y la detección de sistema operativo con su confianza. Abrir PRTG en el mismo prefijo.
-- 4:20 a 5:00. Cerrar con la medida preventiva: qué puerto sobra, qué cortafuegos se queda encendido y por qué el sondeo no salió del segmento propio.
+- 0:00 a 0:40. Decir que el anfitrión es Ubuntu 24.04.5 y el invitado es Alpine Linux 3.24.1. Mostrar las dos salidas de `os-release`.
+- 0:40 a 1:30. Mostrar el puente `br-lab`, la dirección 192.168.100.10 y la del invitado 192.168.100.20. Explicar que comparten segmento, que es lo que VirtualBox llama adaptador puente, y que no se usó NAT.
+- 1:30 a 2:20. Hacer, o mostrar, el ping en los dos sentidos y la tabla ARP con la MAC de QEMU.
+- 2:20 a 3:40. Abrir el descubrimiento de dos hosts y la tabla de puertos del invitado. Leer en voz alta: 22 open, OpenSSH 10.3; 81 closed; 8080 filtered.
+- 3:40 a 4:30. Mostrar que Nmap estimó Linux al 97 % y que el sistema real es Alpine 3.24.1. Decir que PRTG no se instaló porque este anfitrión no es Windows.
+- 4:30 a 5:00. Cerrar con la medida: se apaga el puerto 8000 de prueba, se conserva el filtro y el sondeo no salió de 192.168.100.0/24.
 
 <!-- salto -->

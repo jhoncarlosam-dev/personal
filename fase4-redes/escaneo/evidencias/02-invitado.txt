@@ -1,0 +1,31 @@
+===== INVITADO /etc/os-release =====
+NAME="Alpine Linux"
+ID=alpine
+VERSION_ID=3.24.1
+PRETTY_NAME="Alpine Linux v3.24"
+HOME_URL="https://alpinelinux.org/"
+BUG_REPORT_URL="https://gitlab.alpinelinux.org/alpine/aports/-/issues"
+
+===== uname =====
+Linux vm-alpine 6.18.35-0-virt #1-Alpine SMP PREEMPT_DYNAMIC 2026-06-09 12:34:47 x86_64 Linux
+
+===== ip =====
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    inet 192.168.100.20/24 scope global eth0
+       valid_lft forever preferred_lft forever
+
+===== ruta =====
+default via 192.168.100.10 dev eth0 metric 1 onlink 
+192.168.100.0/24 dev eth0 proto kernel scope link src 192.168.100.20 
+
+===== iptables =====
+-P INPUT ACCEPT
+-P FORWARD ACCEPT
+-P OUTPUT ACCEPT
+-A INPUT -p tcp -m tcp --dport 8080 -j DROP
+-A INPUT -p tcp -m tcp --dport 81 -j REJECT --reject-with tcp-reset
+
+===== openssh =====
+openssh
+ash: openssh: not found
+OpenSSH_10.3p1, OpenSSL 3.5.7 9 Jun 2026

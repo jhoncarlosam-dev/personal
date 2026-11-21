@@ -8,6 +8,7 @@ Informe, página del portal y comandos para la red IPv4, la red IPv6 y el escane
 - Comandos para pegar en Packet Tracer, en `simulacion/`.
 - Portal `web/index.html`, con el nombre de Jhon Carlos Acevedo Mendoza, un recuadro de foto y tres imágenes de telemática.
 - Informe en `informe/Informe_Fase4_Redes_y_Comunicaciones.docx`, con marco de las lecturas, procedimientos, matrices de prueba y guiones de video de cinco minutos.
+- Ejercicio 3 ejecutado el 21 de noviembre de 2026: Ubuntu 24.04.5, Alpine Linux 3.24.1 en el puente `br-lab` (192.168.100.0/24) y Nmap 7.94. Las salidas están en `escaneo/evidencias/`. PRTG no se instaló: el programa oficial corre en Windows.
 
 ## Qué tiene que hacer el grupo
 
@@ -17,7 +18,7 @@ Packet Tracer, VirtualBox, Nmap y PRTG corren en los computadores del grupo. Est
 2. Poner la foto real en el portal: `python3 insertar_foto.py foto.jpg "CEAD o UDR"` dentro de `web/`. Si no hay Python, editar el centro en `index.html` y seguir la nota del informe para la foto.
 3. Armar `Simulacion_IPv4.pkt` siguiendo el ejercicio 1. Pegar los archivos `.txt` en la CLI de cada equipo. La clave Wi-Fi, la del router y la del correo es `Unad2026`.
 4. Armar `Simulacion_IPv6.pkt` en un archivo nuevo, con el ejercicio 2.
-5. En el computador propio: VirtualBox en modo puente, un sistema distinto al anfitrión, Nmap y PRTG. Barrer solo el prefijo de la red propia.
+5. El ejercicio 3 de Nmap ya está corrido sobre 192.168.100.0/24. Si alguien tiene Windows, instala allí la edición gratuita de PRTG y anota los dispositivos de su propio prefijo. No barre la red del campus.
 6. Pegar las capturas en los recuadros amarillos y borrar la frase roja de cada recuadro.
 7. Grabar los tres videos con el guion del informe, subirlos y anotar las URL en `Enlaces_videos.txt`.
 8. Publicar en el foro aportes propios. El apéndice B deja borradores para reescribir, no mensajes listos para copiar.

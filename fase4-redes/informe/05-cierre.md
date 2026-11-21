@@ -10,9 +10,9 @@ El firewall demuestra política, no presencia. Hay tráfico que lo cruza, hay un
 
 La doble pila de la red IPv6 es otra distancia que conviene conservar. El ping y el portal viajan en IPv6. El cliente de correo del simulador y parte de los objetos IoT siguen en IPv4. Decirlo evita presentar como red IPv6 pura un archivo que, en esos dos servicios, usa la otra pila porque la herramienta no da más.
 
-El tercer ejercicio baja la misma pregunta al computador del estudiante. La máquina virtual, leída con Le et al. (2018), es hardware abstraído. El puente la pone en el segmento real. Nmap y PRTG convierten esa vecindad en inventario: hosts, versiones, sistemas y filtros. Abu Bakar y Kijsirikul (2023) muestran que un escáner de alta velocidad, apoyado en DPDK, puede duplicar la tasa y mantener una exactitud del 99,5 % en puertos abiertos dentro de su banco de pruebas. En un segmento de casa o de salón la herramienta proporcionada es Nmap, que los propios autores sitúan en redes pequeñas, seguida de una vigilancia continua con PRTG. El sondeo se queda en el prefijo autorizado. Un puerto filtered se interpreta como un cortafuegos haciendo su trabajo, y la acción siguiente es cerrar lo que no se usa, no evadir el filtro.
+El tercer ejercicio baja la misma pregunta a dos sistemas reales. La máquina virtual, leída con Le et al. (2018), es hardware abstraído: Alpine Linux 3.24.1 sobre el mismo equipo que corre Ubuntu 24.04.5. El puente los pone en 192.168.100.0/24. Nmap 7.94SVN convirtió esa vecindad en inventario el 21 de noviembre de 2026: dos hosts, OpenSSH 10.3 en el puerto 22, un puerto cerrado por reset y el puerto 8080 filtrado por una regla DROP. La estimación del sistema operativo se quedó en la familia Linux, con 97 % de confianza y sin coincidencia exacta, mientras el archivo del invitado dice Alpine 3.24.1. Abu Bakar y Kijsirikul (2023) muestran que un escáner de alta velocidad puede subir la exactitud en puertos abiertos. En este segmento pequeño la herramienta proporcionada es Nmap, y el resultado se reporta con esa diferencia a la vista. PRTG no corrió: su instalador oficial es para Windows y el anfitrión de la prueba es Ubuntu. El sondeo se quedó en el prefijo de la práctica.
 
-Queda por fuera de este documento, y es lo que el grupo tiene que completar antes del cierre de la fase, la ejecución grabada: las capturas de Packet Tracer, el escaneo real, los dos archivos `.pkt` y el video de cinco minutos por ejercicio. Sin esas piezas, el diseño está escrito y la evidencia de funcionamiento, que es el criterio alto de la rúbrica, todavía no.
+Queda por fuera de este documento, y es lo que el grupo tiene que completar antes del cierre de la fase, la ejecución grabada de las dos simulaciones: las capturas de Packet Tracer, los dos archivos `.pkt` y los videos de cinco minutos. En el ejercicio 3, si hay un computador Windows, falta la consola de PRTG sobre el prefijo propio de ese equipo.
 
 # Referencias
 
@@ -55,12 +55,12 @@ Se marca cada fila cuando el recuadro amarillo ya tiene la imagen propia del gru
 | | 2 | Navegador en `http://[2001:db8:134:1::10]` |
 | | 2 | Correo de tres usuarios en unad.edu.co |
 | | 2 | IoT de la red IPv6 |
-| | 3 | Adaptador puente |
-| | 3 | Sistema invitado distinto, ya instalado |
-| | 3 | Direcciones en el mismo prefijo |
-| | 3 | Ping en los dos sentidos |
-| | 3 | Nmap: hosts, versiones, sistema operativo y estado filtered |
-| | 3 | PRTG con dispositivos y puertos |
+| Hecho en consola, 21 nov 2026 | 3 | Puente br-lab, anfitrión 192.168.100.10 e invitado 192.168.100.20 |
+| Hecho | 3 | Invitado Alpine Linux 3.24.1, distinto del anfitrión Ubuntu 24.04.5 |
+| Hecho | 3 | Direcciones en el mismo prefijo 192.168.100.0/24 |
+| Hecho | 3 | Ping en los dos sentidos, 0 % de pérdida |
+| Hecho | 3 | Nmap: 2 hosts, OpenSSH 10.3, closed y filtered. Sistema estimado Linux; real Alpine 3.24.1 |
+| Pendiente | 3 | PRTG. El anfitrión de la prueba es Ubuntu y el instalador oficial es para Windows |
 
 # Apéndice B. Borradores para el foro
 
