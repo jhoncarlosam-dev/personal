@@ -1,0 +1,17 @@
+Fase 4. Redes y comunicaciones 202016898
+Grupo: completar con los nombres de quienes participan
+
+Video ejercicio 1, red IPv4 (máximo 5 minutos):
+URL:
+Fecha de grabación:
+Quién habla:
+
+Video ejercicio 2, red IPv6 (máximo 5 minutos):
+URL:
+Fecha de grabación:
+Quién habla:
+
+Video ejercicio 3, escaneo (máximo 5 minutos):
+URL:
+Fecha de grabación:
+Quién habla:

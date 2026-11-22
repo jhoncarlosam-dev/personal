@@ -1,0 +1,80 @@
+enable
+configure terminal
+hostname SW-Acceso
+no ip domain-lookup
+!
+vlan 10
+ name SERVIDORES
+vlan 30
+ name INALAMBRICA
+vlan 40
+ name CONVERGENTE
+!
+interface FastEthernet0/1
+ description Troncal a R1-Nucleo GigabitEthernet0/0
+ switchport mode trunk
+ switchport trunk allowed vlan 10,30,40
+ no shutdown
+!
+interface FastEthernet0/2
+ description SRV-WEB
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+!
+interface FastEthernet0/3
+ description SRV-CORREO
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+!
+interface FastEthernet0/4
+ description PC-Admin
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+!
+interface FastEthernet0/10
+ description AP-UNAD
+ switchport mode access
+ switchport access vlan 30
+ no shutdown
+!
+interface FastEthernet0/18
+ description Home Gateway IoT
+ switchport mode access
+ switchport access vlan 40
+ no shutdown
+!
+interface FastEthernet0/20
+ description SRV-DHCP
+ switchport mode access
+ switchport access vlan 40
+ no shutdown
+!
+interface FastEthernet0/21
+ description PC-DHCP
+ switchport mode access
+ switchport access vlan 40
+ no shutdown
+!
+interface FastEthernet0/22
+ description TV1
+ switchport mode access
+ switchport access vlan 40
+ no shutdown
+!
+interface FastEthernet0/23
+ description TV2
+ switchport mode access
+ switchport access vlan 40
+ no shutdown
+!
+interface FastEthernet0/24
+ description TV3
+ switchport mode access
+ switchport access vlan 40
+ no shutdown
+!
+end
+write

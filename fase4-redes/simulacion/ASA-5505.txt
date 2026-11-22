@@ -1,0 +1,56 @@
+enable
+configure terminal
+hostname FW-UNAD
+! Si al final aparece "ERROR: Policy map global_policy is already configured",
+! la politica global ya existe. En ese caso no se repite service-policy.
+! Se entra a policy-map global_policy, class inspection_default, y se agrega inspect icmp.
+!
+interface Ethernet0/0
+ description Hacia R1-Nucleo GigabitEthernet0/1 (outside)
+ switchport access vlan 2
+ no shutdown
+!
+interface Ethernet0/1
+ description Hacia SW-Usuarios (inside)
+ switchport access vlan 1
+ no shutdown
+!
+interface Vlan1
+ nameif inside
+ security-level 100
+ ip address 192.168.134.65 255.255.255.192
+ no shutdown
+!
+interface Vlan2
+ nameif outside
+ security-level 0
+ ip address 172.16.1.2 255.255.255.252
+ no shutdown
+!
+route outside 0.0.0.0 0.0.0.0 172.16.1.1
+!
+object network RED_USUARIOS
+ subnet 192.168.134.64 255.255.255.192
+ nat (inside,outside) dynamic interface
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+policy-map global_policy
+ class inspection_default
+  inspect icmp
+!
+service-policy global_policy global
+!
+access-list INSIDE_IN extended deny icmp host 192.168.134.70 host 192.168.134.20 echo
+access-list INSIDE_IN extended permit ip any any
+access-group INSIDE_IN in interface inside
+!
+access-list OUTSIDE_IN extended deny icmp any 192.168.134.64 255.255.255.192 echo
+access-list OUTSIDE_IN extended permit icmp any any echo-reply
+access-list OUTSIDE_IN extended permit icmp any any unreachable
+access-list OUTSIDE_IN extended permit icmp any any time-exceeded
+access-group OUTSIDE_IN in interface outside
+!
+end
+write memory

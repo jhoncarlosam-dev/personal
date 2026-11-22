@@ -1,0 +1,12 @@
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-11-21 19:39 +0000
+Nmap scan report for 192.168.100.10
+Host is up, received arp-response (0.00064s latency).
+
+PORT     STATE    SERVICE    REASON       VERSION
+22/tcp   closed   ssh        conn-refused
+8000/tcp open     http       syn-ack      SimpleHTTPServer 0.6 (Python 3.12.3)
+8080/tcp filtered http-proxy no-response
+MAC Address: 22:B6:26:1A:D2:92 (Unknown)
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 7.92 seconds
